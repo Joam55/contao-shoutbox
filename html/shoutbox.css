@@ -1,0 +1,124 @@
+/* Shoutbox
+ *---------------------------------------------*/
+.shoutbox p.info,
+.shoutbox div.entries,
+.shoutbox textarea, 
+.shoutbox button {
+	display:block;
+	width:220px;
+	margin:4px auto;
+}
+
+.shoutbox .menubar {
+	display:block;
+	width:220px;
+	margin:0 auto;	
+	padding: 0;
+	text-align:right;
+
+}
+
+.shoutbox .menubar button {
+	display:inline;
+	background:none;
+	border:none;
+	width:auto;
+	margin: 0;
+	padding: 0;
+}
+
+.shoutbox .smiley_legend {
+	margin:0 auto;
+}
+
+.shoutbox .smiley_legend ul.smiley_list {
+	text-align:center;
+	margin:0;
+	padding:0;
+}
+.shoutbox .smiley_legend .smiley_list li {
+	display:inline;
+	margin:0;
+	padding:0;
+}
+
+.shoutbox {
+	font-family:'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
+	font-size:11px;
+	line-height:normal;
+	margin:20px auto;	
+}
+
+
+.shoutbox div.entries {
+	background:#eee;
+	display:block;
+	height:200px;
+	overflow:auto;
+	border:3px solid #ddd;
+	color:#4F4F4F;
+	margin-top:0;
+}
+
+.shoutbox ul {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+
+.shoutbox li {
+	padding:1px 3px;
+}
+
+
+.shoutbox p.info {
+	display:block;	
+	background-color:#333;
+	color:#fff;
+	padding:4px;
+	text-align:center;
+	
+}
+
+.shoutbox button {
+	display:block;
+	border:1px solid #ccc;
+	padding:2px;
+}
+
+.shoutbox p {
+	margin:0 0 4px 0;
+	padding:0;
+	
+	word-wrap:break-word;
+	text-wrap:suppress;
+	word-break:break-strict;
+}
+
+.shoutbox strong.username {
+	color:#333;
+	font-weight:bold;
+}
+
+
+.shoutbox span.emoticon {
+   display:inline-block;
+   background:transparent url('emoticons.png') no-repeat top left;
+   width: 16px;
+   height: 16px;
+   margin:0;
+   padding:0;
+}
+.shoutbox span.emoticon-1{ background-position: 0 1px;  } 
+.shoutbox span.emoticon-10{ background-position: 0 -35px;  } 
+.shoutbox span.emoticon-11{ background-position: 0 -71px;  } 
+.shoutbox span.emoticon-12{ background-position: 0 -107px;  } 
+.shoutbox span.emoticon-2{ background-position: 0 -143px;  } 
+.shoutbox span.emoticon-3{ background-position: 0 -179px;  } 
+.shoutbox span.emoticon-4{ background-position: 0 -215px;  } 
+.shoutbox span.emoticon-5{ background-position: 0 -251px;  } 
+.shoutbox span.emoticon-6{ background-position: 0 -287px;  } 
+.shoutbox span.emoticon-7{ background-position: 0 -323px;  } 
+.shoutbox span.emoticon-8{ background-position: 0 -359px;  } 
+.shoutbox span.emoticon-9{ background-position: 0 -396px;  } 
+

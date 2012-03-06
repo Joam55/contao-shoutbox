@@ -1,3 +1,4 @@
+
 CREATE TABLE `tl_module` (
   `shoutbox_id` smallint(5) unsigned NOT NULL default '1',
   `shoutbox_entries` smallint(5) unsigned NOT NULL default '15',

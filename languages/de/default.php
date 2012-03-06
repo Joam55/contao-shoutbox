@@ -21,15 +21,15 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Martin Kozianka 2011-2012 
+ * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/>
  * @author     Martin Kozianka <http://kozianka-online.de/>
  * @package    Shoutbox 
  * @license    GNU/LGPL 
  * @filesource
  */
-array_insert($GLOBALS['FE_MOD']['miscellaneous'], 0, array(
-	'shoutbox' => 'Shoutbox'
-));
 
+$GLOBALS['TL_LANG']['FMD']['shoutbox_timesince_format'] = "[vor %s]:";
+$GLOBALS['TL_LANG']['FMD']['shoutbox_timesince'] = array("Sekunde", "Minute", "Stunde", "Tag", "Woche", "Monat", "Jahr", "Jahrzehnt");
+$GLOBALS['TL_LANG']['FMD']['shoutbox_timesince_plural'] = array("Sekunden", "Minuten", "Stunden", "Tagen", "Wochen", "Monaten", "Jahren", "Jahrzehnte");
 
 ?>

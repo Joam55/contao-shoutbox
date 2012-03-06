@@ -21,15 +21,19 @@
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Martin Kozianka 2011-2012 
- * @author     Martin Kozianka <http://kozianka-online.de/>
+ * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/> 
+ * @author     Martin Kozianka <http://kozianka-online.de/> 
  * @package    Shoutbox 
  * @license    GNU/LGPL 
  * @filesource
  */
-array_insert($GLOBALS['FE_MOD']['miscellaneous'], 0, array(
-	'shoutbox' => 'Shoutbox'
-));
 
+$GLOBALS['TL_LANG']['tl_module']['shoutbox'] = "Shoutbox Settings";
+
+$GLOBALS['TL_LANG']['FMD']['shoutbox']  = array('Shoutbox', 'Shoutbox');
+$GLOBALS['TL_LANG']['FMD']['shoutbox_id'] = array("Shoutbox ID", "Shoutbox ID. Only important if you need more then one shoutbox.");
+$GLOBALS['TL_LANG']['FMD']['shoutbox_entries'] = array("Show X entries", "Show X entries");
+$GLOBALS['TL_LANG']['FMD']['shoutbox_rows'] = array("Textarea - rows (height)", "Textarea - rows (height)");
+$GLOBALS['TL_LANG']['FMD']['shoutbox_cols'] = array("Textarea - cols (width)", "Textarea - cols (width)");
 
 ?>

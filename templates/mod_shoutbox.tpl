@@ -5,10 +5,7 @@
 	<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 <?php endif;?>
 
-
 <div class="shoutbox" id="<?php echo $sb_id; ?>">
-
-
 
 <div class="menubar">
 	<button type="button" onclick="Shoutbox.refresh('<?php echo $sb_id; ?>')"><img src="/system/themes/default/images/reload.gif"></button>

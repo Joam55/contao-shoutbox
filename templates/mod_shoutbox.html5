@@ -23,7 +23,7 @@
 	<p class="info">Bitte einloggen um etwas zu schreiben!</p>
 <?php else: ?>
 
-<form action="?shoutbox_action=shout" method="post">
+<form action="<?php echo $this->action; ?>?shoutbox_action=shout" method="post">
 	<input class="request_token" type="hidden" name="REQUEST_TOKEN" value="{{request_token}}">  
 	<input type="hidden" name="FORM_SUBMIT" value="com_Shoutbox_<?php echo $this->shoutbox_id; ?>" />
 	<input type="hidden" name="shoutbox" value="shout" />

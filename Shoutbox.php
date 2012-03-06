@@ -40,28 +40,8 @@ class Shoutbox extends Module {
 	private $objConfig = null;
 	
 	protected $strTemplate = 'mod_shoutbox';
-
-	public function __construct(Database_Result $objModule, $strColumn = 'main') {
-
-		if ($objModule !== null) {
-			parent::__construct($objModule, $strColumn);
-		}
-
-		$this->import('FrontendUser', 'User');
-		$this->loggedIn = FE_USER_LOGGED_IN;
-
-		$this->objConfig = new stdClass();
-
-		$this->objConfig->perPage = $this->shoutbox_entries;
-		$this->objConfig->template = 'com_shoutbox';
-		$this->objConfig->order = 'descending';
-		
-		$this->objConfig->requireLogin   = true;
-		$this->objConfig->disableCaptcha = true;		
-		$this->objConfig->bbcode         = true;
-		$this->objConfig->moderate       = false;
-	}
-
+	protected $com_template = 'com_shoutbox';
+	
 	private function parseComment($comment) {
 		$img = '[img]'.$this->Environment->base.'/system/modules/shoutbox/html/link.png[/img]';
 		$comment = preg_replace('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', '[url=http$4://$5$6] '.$img.' [/url]', $comment);
@@ -103,12 +83,14 @@ class Shoutbox extends Module {
 	}	
 			
 	protected function compile() {
-		
+		$this->import('FrontendUser', 'User');
+		$this->loggedIn = FE_USER_LOGGED_IN;
+
 		// TODO: Sperre für ein paar Minuten
 		// TODO: Realer Name oder Benutzername
 		
 		$action  = $this->Input->get('shoutbox_action');
-		$sb_ajax = ($this->Input->get('shoutbox_ajax') == 'true');
+		$sb_ajax = ($this->Input->get('shoutbox_ajax') === 'true');
 
 		if ($action === 'update') {
 			$date = intval($this->Input->get('shoutbox_date'));
@@ -118,6 +100,7 @@ class Shoutbox extends Module {
 		}
 
 		if ($action === 'shout' && $this->loggedIn) {
+
 			$_POST['name']  = $this->User->username;
 			$_POST['email'] = $this->User->email;
 			$_POST['comment'] = $this->parseComment($_POST['comment']);
@@ -128,14 +111,14 @@ class Shoutbox extends Module {
 
 		$this->Comments->addCommentsToTemplate(
 			$this->Template,
-			$this->objConfig,
+			$this->getCommentConfigObj(),
 			'Shoutbox',
 			$this->shoutbox_id,
 			$GLOBALS['TL_ADMIN_EMAIL']
 		);
 
 		// Return JSON String for Contao 2.9.x
-		if ($sb_ajax && $action == 'shout') {
+		if ($sb_ajax && $action === 'shout') {
 			$json = new stdClass();
 			$json->result = 'ready';
 			echo json_encode($json);	
@@ -145,11 +128,23 @@ class Shoutbox extends Module {
 		$GLOBALS['TL_CSS'][] = 'system/modules/shoutbox/html/shoutbox.css';
 		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/html/shoutbox.js';
 		
+		$this->Template->action = $this->getIndexFreeRequest();
 		$this->Template->loggedIn = $this->loggedIn;
 		$this->Template->comments = $this->emoticon_replacer($this->Template->comments);
 		
 	}
 
+	function getCommentConfigObj() {
+		$objConfig = new stdClass();
+		$objConfig->perPage = $this->shoutbox_entries;
+		$objConfig->template = 'com_shoutbox';
+		$objConfig->order = 'descending';
+		$objConfig->requireLogin   = true;
+		$objConfig->disableCaptcha = true;
+		$objConfig->bbcode         = true;
+		$objConfig->moderate       = false;
+		return $objConfig;
+	}
 }
 
 ?>

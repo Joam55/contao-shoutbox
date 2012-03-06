@@ -27,9 +27,13 @@
  * @license    GNU/LGPL 
  * @filesource
  */
+
+
+
 array_insert($GLOBALS['FE_MOD']['miscellaneous'], 0, array(
 	'shoutbox' => 'Shoutbox'
 ));
 
+$GLOBALS['TL_HOOKS']['addComment'][] = array("ShoutboxCallback", "hookAddComment");
 
 ?>

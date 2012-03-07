@@ -74,7 +74,10 @@ class Shoutbox extends Module {
 		$strContent = "";
 		$objPartial = new FrontendTemplate($this->com_template);	
 		while($result->next()) {
-			$objPartial->setData($result->row());
+			$row = $result->row();
+			
+			$row['timestamp'] = $row['date']; 
+			$objPartial->setData($row);
 			$strContent .= $objPartial->parse();
 		}
 		$strContent = $this->replaceInsertTags($strContent);

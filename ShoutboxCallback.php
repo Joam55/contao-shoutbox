@@ -54,7 +54,17 @@ class ShoutboxCallback extends Frontend {
 	}
 
 	private function notifiy($insertId, $arrSet) {
-		
+
+		// Check if notification is activated
+		$result = $this->Database->prepare("SELECT shoutbox_notification"
+				." FROM tl_module WHERE shoutbox_id = ? AND type = ?")
+				->execute($arrSet['parent'], 'shoutbox');
+		if($result->numRows) {
+			if ($result->shoutbox_notification != '1') {
+				return false;
+			}
+		}
+				
 		$strComment = $arrSet['comment'];
 
 		$objEmail = new Email();
@@ -77,6 +87,7 @@ class ShoutboxCallback extends Frontend {
 
 		// TODO Könnte man noch konfigurieren
 		$objEmail->sendTo($GLOBALS['TL_ADMIN_EMAIL']);
+		return true;
 	}
 	
 }

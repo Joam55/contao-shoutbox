@@ -27,13 +27,6 @@
  * @license    GNU/LGPL 
  * @filesource
  */
-
-$GLOBALS['TL_LANG']['tl_module']['shoutbox'] = "Shoutbox Settings";
-
 $GLOBALS['TL_LANG']['FMD']['shoutbox']  = array('Shoutbox', 'Shoutbox');
-$GLOBALS['TL_LANG']['FMD']['shoutbox_id'] = array("Shoutbox ID", "Shoutbox ID. Only important if you need more then one shoutbox.");
-$GLOBALS['TL_LANG']['FMD']['shoutbox_entries'] = array("Show X entries", "Show X entries");
-$GLOBALS['TL_LANG']['FMD']['shoutbox_rows'] = array("Textarea - rows (height)", "Textarea - rows (height)");
-$GLOBALS['TL_LANG']['FMD']['shoutbox_cols'] = array("Textarea - cols (width)", "Textarea - cols (width)");
 
 ?>

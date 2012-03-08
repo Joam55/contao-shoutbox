@@ -32,10 +32,11 @@
  * Front end modules
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['shoutbox'] = '{title_legend},name,headline,type;{shoutbox},shoutbox_id,shoutbox_entries,shoutbox_rows,shoutbox_cols';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['shoutbox'] = '{title_legend},name,headline,type;'
+.'{shoutbox_legend},shoutbox_id,shoutbox_entries,shoutbox_rows,shoutbox_cols,shoutbox_notification';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_id'] = array(
-	'label' 		=> &$GLOBALS['TL_LANG']['FMD']['shoutbox_id'],
+	'label' 		=> &$GLOBALS['TL_LANG']['tl_module']['shoutbox_id'],
 	'exclude'		=> true,
 	'inputType'		=> 'select',
 	'options'		=> array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
@@ -43,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_id'] = array(
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_entries'] = array(
-	'label'         => &$GLOBALS['TL_LANG']['FMD']['shoutbox_entries'],
+	'label'         => &$GLOBALS['TL_LANG']['tl_module']['shoutbox_entries'],
 	'exclude'       => true,
 	'inputType'		=> 'select',
 	'options'		=> array(10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70),
@@ -52,21 +53,29 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_entries'] = array(
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_rows'] = array(
-	'label' 		=> &$GLOBALS['TL_LANG']['FMD']['shoutbox_rows'],
-	'exclude'		=> true,
-	'inputType'		=> 'select',
-	'options'		=> array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-	'default'		=> 3,
-	'eval'			=> array('tl_class' => 'w50')
+		'label' 		=> &$GLOBALS['TL_LANG']['tl_module']['shoutbox_rows'],
+		'exclude'		=> true,
+		'inputType'		=> 'select',
+		'options'		=> array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+		'default'		=> 3,
+		'eval'			=> array('tl_class' => 'w50')
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_cols'] = array(
-	'label' 		=> &$GLOBALS['TL_LANG']['FMD']['shoutbox_cols'],
+	'label' 		=> &$GLOBALS['TL_LANG']['tl_module']['shoutbox_cols'],
 	'exclude'		=> true,	
 	'inputType'		=> 'select',
 	'options'		=> array(10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70),
 	'default'		=> 25,
 	'eval'			=> array('tl_class' => 'w50')
+);
+
+$GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_notification'] = array(
+		'label' 		=> &$GLOBALS['TL_LANG']['tl_module']['shoutbox_notification'],
+		'exclude'		=> true,
+		'inputType'		=> 'checkbox',
+		'default'		=> true,
+		'eval'			=> array('tl_class' => 'w50')
 );
 
 ?>

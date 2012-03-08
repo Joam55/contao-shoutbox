@@ -28,7 +28,13 @@
  * @filesource
  */
 
-$GLOBALS['TL_LANG']['FMD']['shoutbox']  = array('Shoutbox', 'Shoutbox');
+
+$GLOBALS['TL_LANG']['tl_module']['shoutbox_legend'] = "Shoutbox Einstellungen";
+$GLOBALS['TL_LANG']['tl_module']['shoutbox_notification'] = array("Email-Benachrichtigung", "Soll eine Email-Benachrichtigung geschickt werden?");
+$GLOBALS['TL_LANG']['tl_module']['shoutbox_id'] = array("Shoutbox ID", "ID der Shoutbox. Wird benötigt, wenn man mehrere Shoutboxen einrichten will.");
+$GLOBALS['TL_LANG']['tl_module']['shoutbox_entries'] = array("Anzahl der Einträge", "Anzahl der Einträge, die angezeigt werden sollen.");
+$GLOBALS['TL_LANG']['tl_module']['shoutbox_rows'] = array("Textarea - Zeilen (Höhe)", "Anzahl der Zeilen der Shoutbox Textarea.");
+$GLOBALS['TL_LANG']['tl_module']['shoutbox_cols'] = array("Textarea - Spalten (Breite)", "Anzahl der Spalten der Shoutbox Textarea.");
 
 
 ?>

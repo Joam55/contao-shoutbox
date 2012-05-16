@@ -4,29 +4,15 @@
  * Contao Open Source CMS
  * Copyright (C) 2005-2012 Leo Feyer
  *
- * Formerly known as TYPOlight Open Source CMS.
- *
- * This program is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation, either
- * version 3 of the License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program. If not, please visit the Free
- * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/> 
+ * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/>
  * @author     Martin Kozianka <http://kozianka-online.de/>
  * @package    Shoutbox 
- * @license    GNU/LGPL 
+ * @license    LGPL 
  * @filesource
  */
+
 
 /**
  * Class Shoutbox 
@@ -36,7 +22,6 @@
  * @package    Controller
  */
 class Shoutbox extends Module {
-	private $versionStr = '?v=0.9.5';
 	private $loggedIn   = false;
 	private $objConfig  = null;
 	
@@ -131,10 +116,12 @@ class Shoutbox extends Module {
 			$json->result = 'ready';
 			$this->output(json_encode($json), true);	
 		}
+
 		
-		
-		$GLOBALS['TL_CSS'][] = 'system/modules/shoutbox/html/shoutbox.css'.$this->versionStr;
-		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/html/shoutbox.js'.$this->versionStr;
+		$cacheString = '?v='.@filemtime(TL_ROOT.'/system/modules/shoutbox/html/shoutbox.js');
+
+		$GLOBALS['TL_CSS'][] = 'system/modules/shoutbox/html/shoutbox.css'.$cacheString;
+		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/html/shoutbox.js'.$cacheString;
 		
 		$this->Template->action = $this->getIndexFreeRequest();
 		$this->Template->loggedIn = $this->loggedIn;
@@ -164,4 +151,3 @@ class Shoutbox extends Module {
 	}
 }
 
-?>

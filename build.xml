@@ -4,7 +4,7 @@
 	<property name="pluginname" value="shoutbox"/>
 	<property name="dist" location="dist"/>
 
-	<target name="build" description="build" depends="clean, copy, zip "/>
+	<target name="build" description="build" depends="clean, copy, templates, zip "/>
 
 	<target name="clean" description="clean">
 		<delete includeemptydirs="true" verbose="true" failonerror="false">
@@ -26,6 +26,22 @@
 			</fileset>
 		</copy>
 	</target>
+
+	<target name="templates" description="templates">
+		<mkdir dir="${dist}/${pluginname}/templates" />
+		<copy todir="${dist}/${pluginname}/templates" verbose="true">
+		    <fileset dir="./templates">
+		    	<include name="*.html5"/>  
+		    </fileset>
+			<mapper type="glob" from="*.html5" to="*.xhtml"/>
+		</copy>
+		<copy todir="${dist}/${pluginname}/templates" verbose="true">
+		    <fileset dir="./templates">
+		    	<include name="*.html5"/>  
+		    </fileset>
+			<mapper type="glob" from="*.html5" to="*.tpl"/>
+		</copy>
+	 </target>
 
 	<target name="zip" description="generate zip file">
 		<zip destfile="${pluginname}.zip" basedir="${dist}" />		

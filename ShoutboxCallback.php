@@ -44,13 +44,26 @@ class ShoutboxCallback extends Frontend {
 	
 	
 	public function hookAddComment($insertId, $arrSet) {
-		$json = new stdClass();
-		$json->token = REQUEST_TOKEN;
-		$json->result = 'ready';
 		
+		if ($arrSet['source'] !== 'Shoutbox') {
+			return;	
+		}
+
 		$this->notifiy($insertId, $arrSet);
-		echo json_encode($json);
-		exit;
+		
+		if ($this->Input->get('shoutbox_ajax') === 'true') {
+			
+			header('HTTP/1.0 200 OK');
+			header('Content-type: application/json');
+
+			$json = new stdClass();
+			$json->token = REQUEST_TOKEN;
+			$json->result = 'ready';
+			echo json_encode($json);
+			exit;
+		}
+		
+		$this->redirect($this->addToUrl(''));
 	}
 
 	private function notifiy($insertId, $arrSet) {

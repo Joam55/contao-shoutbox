@@ -5,27 +5,33 @@
 
 var Shoutbox = (function() {
 
-	var domainNames = [
-           	"dortmunder-asche.de",
-           	"facebook.com",
-           	"fussball.de",
-           	"plus.google.com",
-           	"reviersport.de",
-           	"twitter.com",
-           	"youtube.com"];
+var domainNames = [
+  "dortmunder-asche.de",
+  "facebook.com",
+  "fussball.de",
+  "plus.google.com",
+  "reviersport.de",
+  "twitter.com",
+  "youtube.com"];
 
 return {
 
 	
 	refresh: function(id) {
+		var action = $(id).getElement('form').get('action');
+		if ((typeof action) !== 'string') {
+			action ='';
+		}
+
 		new Request({
 			onSuccess: function(htmlString) {
 				if (htmlString.length > 0) {
 					$(id + '_list').set('html', htmlString);
 				}
 				Shoutbox.updateShoutboxLinkTags(id);			},
+			url: action + '?shoutbox_action=update',
 			method:'get'
-		}).send('shoutbox_action=update');
+		}).send(); // 'shoutbox_action=update'
 		
 			},
 	
@@ -74,6 +80,11 @@ return {
 		// add ajax parameter and submit event
 		var theForm = $(shoutbox_id).getElement('form');
 
+		var action = theForm.get('action');
+		if ((typeof action) !== 'string') {
+			action ='';
+		}
+
 		$$('div.smiley_legend ul.smiley_list span').addEvent('click', function() {
     			Shoutbox.insertAtCursor(document.getElementById(shoutbox_id+'_textarea'), ' '+this.title);
 		});
@@ -99,7 +110,7 @@ return {
 					$$('#'+shoutbox_id+' button.submit').set('disabled', null);
 				},
 				method: 'post',
-				url: theForm.get('action') + '&shoutbox_ajax=true'
+				url: action + '?shoutbox_ajax=true'
 			}).send(theForm.toQueryString());
  
  		

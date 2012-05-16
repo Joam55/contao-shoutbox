@@ -13,9 +13,11 @@
 
 <div class="entries"><ul id="<?php echo $sb_id; ?>_list">
 
-<?php foreach ($this->comments as $comment): ?>
-	<?php echo $comment; ?>
-<?php endforeach; ?>
+<?php if ($this->comments): ?>
+	<?php foreach ($this->comments as $comment): ?>
+		<?php echo $comment; ?>
+	<?php endforeach; ?>
+<?php endif; ?>
 
 </ul></div>
 
@@ -23,10 +25,10 @@
 	<p class="info">Bitte einloggen um etwas zu schreiben!</p>
 <?php else: ?>
 
-<form action="<?php echo $this->action; ?>?shoutbox_action=shout" method="post">
+<form action="<?php echo $this->action; ?>" method="post">
 	<input class="request_token" type="hidden" name="REQUEST_TOKEN" value="{{request_token}}">  
 	<input type="hidden" name="FORM_SUBMIT" value="com_Shoutbox_<?php echo $this->shoutbox_id; ?>" />
-	<input type="hidden" name="shoutbox" value="shout" />
+	<input type="hidden" name="shoutbox_action" value="shout" />
 	<div class="txtarea">
 	<textarea id="<?php echo $sb_id; ?>_textarea" name="comment" rows="<?php echo $this->shoutbox_rows; ?>" cols="<?php echo $this->shoutbox_cols; ?>"></textarea>
 	</div>
@@ -57,8 +59,11 @@
 <!--//--><![CDATA[//><!--
 	window.addEvent('domready', function() {
 		<?php if ($this->loggedIn): ?>
+		
     	Shoutbox.init('shoutbox_<?php echo $this->shoutbox_id; ?>');
+    	
     	<?php endif;?>
+    	
     	Shoutbox.updateShoutboxLinkTags('shoutbox_<?php echo $this->shoutbox_id; ?>');
 	});
 	// Refresh automatisieren

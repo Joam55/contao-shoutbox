@@ -28,6 +28,9 @@ return {
 				if (htmlString.length > 0) {
 					$(id + '_list').set('html', htmlString);
 				}
+				
+				// TODO :: scroll to top after refresh
+				
 				Shoutbox.updateShoutboxLinkTags(id);			},
 			url: action + '?shoutbox_action=update',
 			method:'get'

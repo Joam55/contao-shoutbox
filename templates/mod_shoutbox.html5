@@ -23,6 +23,7 @@
 
 <?php if (!$this->loggedIn): ?>
 	<p class="info">Bitte einloggen um etwas zu schreiben!</p>
+	<form action="<?php echo $this->action; ?>" method="post"></form>
 <?php else: ?>
 
 <form action="<?php echo $this->action; ?>" method="post">

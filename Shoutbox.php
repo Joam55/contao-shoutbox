@@ -109,7 +109,6 @@ class Shoutbox extends Module {
 			array($GLOBALS['TL_ADMIN_EMAIL'])
 		);
 		
-		
 		// Return JSON String for Contao 2.9.x
 		if ($sb_ajax && $action === 'shout') {
 			$json = new stdClass();
@@ -117,12 +116,9 @@ class Shoutbox extends Module {
 			$this->output(json_encode($json), true);	
 		}
 
-		
-		$cacheString = '?v='.@filemtime(TL_ROOT.'/system/modules/shoutbox/html/shoutbox.js');
+		$GLOBALS['TL_CSS'][] 		 = 'system/modules/shoutbox/html/shoutbox.css|all,screen|static';
+		$GLOBALS['TL_JAVASCRIPT'][]  = 'system/modules/shoutbox/html/shoutbox.js';
 
-		$GLOBALS['TL_CSS'][] = 'system/modules/shoutbox/html/shoutbox.css'.$cacheString;
-		$GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/html/shoutbox.js'.$cacheString;
-		
 		$this->Template->action = $this->getIndexFreeRequest();
 		$this->Template->loggedIn = $this->loggedIn;
 		$this->Template->comments = $this->emoticon_replacer($this->Template->comments);
@@ -134,7 +130,7 @@ class Shoutbox extends Module {
 		$objConfig->perPage        = $this->shoutbox_entries;
 		$objConfig->template       = 'com_shoutbox';
 		$objConfig->order          = 'descending';
-		$objConfig->requireLogin   = true;
+		$objConfig->requireLogin   = false;
 		$objConfig->disableCaptcha = true;
 		$objConfig->bbcode         = true;
 		$objConfig->moderate       = false;

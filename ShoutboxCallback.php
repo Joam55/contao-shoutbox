@@ -83,7 +83,7 @@ class ShoutboxCallback extends Frontend {
 				$this->Environment->base . $this->Environment->request,
 				$this->Environment->base . 'contao/main.php?do=comments&act=edit&id=' . $insertId);
 		
-
+		// TODO Sollte die Adresse aus der Rootseite sein
 		// TODO Könnte man noch konfigurieren
 		$objEmail->sendTo($GLOBALS['TL_ADMIN_EMAIL']);
 		return true;

@@ -6,8 +6,8 @@
  *
  *
  * PHP version 5
- * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/>
- * @author     Martin Kozianka <http://kozianka-online.de/>
+ * @copyright  Martin Kozianka 2011-2012 <http://kozianka.de/>
+ * @author     Martin Kozianka <http://kozianka.de/>
  * @package    Shoutbox 
  * @license    LGPL 
  * @filesource
@@ -17,8 +17,8 @@
 /**
  * Class Shoutbox 
  *
- * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/>
- * @author     Martin Kozianka <http://kozianka-online.de/> 
+ * @copyright  Martin Kozianka 2011-2012 <http://kozianka.de/>
+ * @author     Martin Kozianka <http://kozianka.de/> 
  * @package    Controller
  */
 class Shoutbox extends Module {
@@ -29,7 +29,7 @@ class Shoutbox extends Module {
 	protected $com_template = 'com_shoutbox';
 	
 	private function parseComment($comment) {
-		$img = '[img]'.$this->Environment->base.'/system/modules/shoutbox/html/link.png[/img]';
+		$img = '[img]'.$this->Environment->base.'/system/modules/shoutbox/assets/link.png[/img]';
 		$comment = preg_replace('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', '[url=http$4://$5$6] '.$img.' [/url]', $comment);
 		return $comment;
 	}
@@ -116,8 +116,8 @@ class Shoutbox extends Module {
 			$this->output(json_encode($json), true);	
 		}
 
-		$GLOBALS['TL_CSS'][] 		 = 'system/modules/shoutbox/html/shoutbox.css|all,screen|static';
-		$GLOBALS['TL_JAVASCRIPT'][]  = 'system/modules/shoutbox/html/shoutbox.js';
+		$GLOBALS['TL_CSS'][] 		 = 'system/modules/shoutbox/assets/shoutbox.css|all,screen|static';
+		$GLOBALS['TL_JAVASCRIPT'][]  = 'system/modules/shoutbox/assets/shoutbox.js';
 
 		$this->Template->action = $this->getIndexFreeRequest();
 		$this->Template->loggedIn = $this->loggedIn;

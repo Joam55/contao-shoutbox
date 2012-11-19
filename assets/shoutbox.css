@@ -1,6 +1,8 @@
 /* Shoutbox
- * (c) 2011-2012 Martin Kozianka <http://kozianka-online.de>
+ * (c) 2011-2012 Martin Kozianka <http://kozianka.de>
  *-------------------------------------------------------------------*/
+ 
+
 .shoutbox p.info,
 .shoutbox div.entries,
 .shoutbox textarea, 
@@ -110,16 +112,17 @@
    margin:0;
    padding:0;
 }
-.shoutbox span.emoticon-1{ background-position: 0 1px;  } 
-.shoutbox span.emoticon-10{ background-position: 0 -35px;  } 
-.shoutbox span.emoticon-11{ background-position: 0 -71px;  } 
-.shoutbox span.emoticon-12{ background-position: 0 -107px;  } 
-.shoutbox span.emoticon-2{ background-position: 0 -143px;  } 
-.shoutbox span.emoticon-3{ background-position: 0 -179px;  } 
-.shoutbox span.emoticon-4{ background-position: 0 -215px;  } 
-.shoutbox span.emoticon-5{ background-position: 0 -251px;  } 
-.shoutbox span.emoticon-6{ background-position: 0 -287px;  } 
-.shoutbox span.emoticon-7{ background-position: 0 -323px;  } 
-.shoutbox span.emoticon-8{ background-position: 0 -359px;  } 
-.shoutbox span.emoticon-9{ background-position: 0 -396px;  } 
+
+.shoutbox span.emoticon-1  { background-position: 0 1px;    } 
+.shoutbox span.emoticon-2  { background-position: 0 -143px; } 
+.shoutbox span.emoticon-3  { background-position: 0 -179px; } 
+.shoutbox span.emoticon-4  { background-position: 0 -215px; } 
+.shoutbox span.emoticon-5  { background-position: 0 -251px; } 
+.shoutbox span.emoticon-6  { background-position: 0 -287px; } 
+.shoutbox span.emoticon-7  { background-position: 0 -323px; } 
+.shoutbox span.emoticon-8  { background-position: 0 -359px; } 
+.shoutbox span.emoticon-9  { background-position: 0 -396px; } 
+.shoutbox span.emoticon-10 { background-position: 0 -35px;  } 
+.shoutbox span.emoticon-11 { background-position: 0 -71px;  } 
+.shoutbox span.emoticon-12 { background-position: 0 -107px; } 
 

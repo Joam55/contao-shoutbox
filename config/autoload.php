@@ -6,8 +6,8 @@
  *
  *
  * PHP version 5
- * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/>
- * @author     Martin Kozianka <http://kozianka-online.de/>
+ * @copyright  Martin Kozianka 2011-2012 <http://kozianka.de/>
+ * @author     Martin Kozianka <http://kozianka.de/>
  * @package    Shoutbox 
  * @license    LGPL 
  * @filesource
@@ -20,8 +20,8 @@
 ClassLoader::addClasses(array
 (
 	// Shoutbox
-	'Shoutbox'         => 'system/modules/shoutbox/Shoutbox.php',
-	'ShoutboxCallback' => 'system/modules/shoutbox/ShoutboxCallback.php',
+	'Shoutbox'         => 'system/modules/shoutbox/classes/Shoutbox.php',
+	'ShoutboxCallback' => 'system/modules/shoutbox/classes/ShoutboxCallback.php',
 ));
 
 

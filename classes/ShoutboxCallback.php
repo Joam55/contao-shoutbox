@@ -6,8 +6,8 @@
  *
  *
  * PHP version 5
- * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/>
- * @author     Martin Kozianka <http://kozianka-online.de/>
+ * @copyright  Martin Kozianka 2011-2012 <http://kozianka.de/>
+ * @author     Martin Kozianka <http://kozianka.de/>
  * @package    Shoutbox 
  * @license    LGPL 
  * @filesource
@@ -17,8 +17,8 @@
 /**
  * Class ShoutboxCallback 
  *
- * @copyright  Martin Kozianka 2011-2012 <http://kozianka-online.de/>
- * @author     Martin Kozianka <http://kozianka-online.de/> 
+ * @copyright  Martin Kozianka 2011-2012 <http://kozianka.de/>
+ * @author     Martin Kozianka <http://kozianka.de/> 
  * @package    Controller
  */
 class ShoutboxCallback extends Frontend {

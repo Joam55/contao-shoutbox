@@ -1,6 +1,6 @@
 /*!
 	Shoutbox
-	(c) 2011-2012 Martin Kozianka <http://kozianka-online.de>
+	(c) 2011-2012 Martin Kozianka <http://kozianka.de>
 */
 
 var Shoutbox = (function() {

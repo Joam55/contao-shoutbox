@@ -17,11 +17,11 @@
 		<mkdir dir="${dist}/${pluginname}" />
 		<copy todir="${dist}/${pluginname}" verbose="true">
 			<fileset dir=".">
-				<include name="*.php"/>
+				<include name="classes/**"/>
 				<include name="config/**"/>
 				<include name="dca/**"/>
 				<include name="languages/**"/>
-				<include name="html/**"/>
+				<include name="assets/**"/>
 				<include name="templates/**"/>
 			</fileset>
 		</copy>
@@ -35,13 +35,7 @@
 		    </fileset>
 			<mapper type="glob" from="*.html5" to="*.xhtml"/>
 		</copy>
-		<copy todir="${dist}/${pluginname}/templates" verbose="true">
-		    <fileset dir="./templates">
-		    	<include name="*.html5"/>  
-		    </fileset>
-			<mapper type="glob" from="*.html5" to="*.tpl"/>
-		</copy>
-	 </target>
+	</target>
 
 	<target name="zip" description="generate zip file">
 		<zip destfile="${pluginname}.zip" basedir="${dist}" />		

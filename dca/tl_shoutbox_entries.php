@@ -48,7 +48,16 @@ $GLOBALS['TL_DCA']['tl_shoutbox_entries'] = array(
             'showColumns'             => true,
             'label_callback'          => array('tl_shoutbox_entries', 'labelCallback')
         ),
-
+        'global_operations' => array
+        (
+            'all' => array
+            (
+                'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'                => 'act=select',
+                'class'               => 'header_edit_all',
+                'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
+            )
+        ),
         'operations' => array
         (
             'edit' => array

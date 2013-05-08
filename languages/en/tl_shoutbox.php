@@ -13,6 +13,7 @@
  * @filesource
  */
 
+$GLOBALS['TL_LANG']['tl_shoutbox']['new']                 = array("New Shoutbox", "Create a new shoutbox.");
 $GLOBALS['TL_LANG']['tl_shoutbox']['title_legend']        = "Shoutbox";
 $GLOBALS['TL_LANG']['tl_shoutbox']['title']               = array("Title", "Shoutbox title");
 

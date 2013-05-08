@@ -12,7 +12,7 @@
  * @license    LGPL 
  * @filesource
  */
-
+$GLOBALS['TL_LANG']['tl_shoutbox']['new']                 = array("Neue Shoutbox", "Eine neue Shoutbox anlegen.");
 $GLOBALS['TL_LANG']['tl_shoutbox']['title_legend']        = "Shoutbox";
 $GLOBALS['TL_LANG']['tl_shoutbox']['title']               = array("Titel", "Titel der Shoutbox");
 $GLOBALS['TL_LANG']['tl_shoutbox']['email']               = array("Emailadresse", "Email-Benachrichtigung bei einem neuen Eintrag.");

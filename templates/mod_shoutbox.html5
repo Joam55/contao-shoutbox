@@ -5,20 +5,15 @@
 	<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 <?php endif;?>
 
+
 <div class="shoutbox" id="<?php echo $sb_id; ?>">
 
 <div class="menubar">
-	<button type="button" onclick="Shoutbox.refresh('<?php echo $sb_id; ?>')"><img src="/system/themes/default/images/reload.gif"></button>
+	<button type="button" onclick="<?php echo ($this->hasJavascript) ? "Shoutbox.refresh('".$sb_id."');" : "location.reload();"; ?>"><img src="/system/themes/default/images/reload.gif"></button>
 </div>
 
-<div class="entries"><ul id="<?php echo $sb_id; ?>_list">
-
-<?php if ($this->comments): ?>
-	<?php foreach ($this->comments as $comment): ?>
-		<?php echo $comment; ?>
-	<?php endforeach; ?>
-<?php endif; ?>
-
+<div id="<?php echo $sb_id; ?>_entries" class="entries"><ul id="<?php echo $sb_id; ?>_list">
+    <?php if ($this->entries): echo $this->entries;  endif; ?>
 </ul></div>
 
 <?php if (!$this->loggedIn): ?>
@@ -29,9 +24,9 @@
 <form action="<?php echo $this->action; ?>" method="post">
 	<input class="request_token" type="hidden" name="REQUEST_TOKEN" value="{{request_token}}">  
 	<input type="hidden" name="FORM_SUBMIT" value="com_Shoutbox_<?php echo $this->shoutbox_id; ?>" />
-	<input type="hidden" name="shoutbox_action" value="shout" />
+    <input type="hidden" name="shoutbox_action" value="shout" />
 	<div class="txtarea">
-	<textarea id="<?php echo $sb_id; ?>_textarea" name="comment" rows="<?php echo $this->shoutbox_rows; ?>" cols="<?php echo $this->shoutbox_cols; ?>"></textarea>
+	<textarea id="<?php echo $sb_id; ?>_textarea" name="shoutbox_entry"></textarea>
 	</div>
 	<button type="submit" class="submit">Senden</button>
 	<div class="smiley_legend">
@@ -56,21 +51,6 @@
 
 <?php endif; // !loggedIn ?>
 
-<script type="text/javascript">
-<!--//--><![CDATA[//><!--
-	window.addEvent('domready', function() {
-		<?php if ($this->loggedIn): ?>
-		
-    	Shoutbox.init('shoutbox_<?php echo $this->shoutbox_id; ?>');
-    	
-    	<?php endif;?>
-    	
-    	Shoutbox.updateShoutboxLinkTags('shoutbox_<?php echo $this->shoutbox_id; ?>');
-	});
-	// Refresh automatisieren
-//--><!]]>
-</script>
-
-
 </div>
 <!-- indexer::continue -->
+

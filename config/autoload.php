@@ -18,8 +18,7 @@
  */
 ClassLoader::addClasses(array
 (
-	// Shoutbox
-	'Shoutbox'            => 'system/modules/shoutbox/modules/Shoutbox.php',
+	'Shoutbox'         => 'system/modules/shoutbox/modules/Shoutbox.php',
 ));
 
 
@@ -28,6 +27,6 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'shoutbox_entry'   => 'system/modules/shoutbox/templates',
-	'mod_shoutbox'     => 'system/modules/shoutbox/templates',
+    'shoutbox_entry'   => 'system/modules/shoutbox/templates',
+    'mod_shoutbox'     => 'system/modules/shoutbox/templates',
 ));

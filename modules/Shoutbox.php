@@ -22,90 +22,148 @@
  * @package    Controller
  */
 
-// TODO: Sperre für ein paar Minuten
-// TODO: Realer Name oder Benutzername
-// TODO: Ordner für die Link-Icons (Datei generieren wenn Sie nicht existiert.)
+
+/* TODO IDEA Generate css file with icon definition from given folder
+.shoutbox div.entries a span.facebookcom   { background-color:blue;}
+.shoutbox div.entries a span.googlecom     { background-color:burlywood;}
+.shoutbox div.entries a span.doodlecom     { background-color:lightblue; }
+*/
 
 class Shoutbox extends Module {
-	private $loggedIn        = false;
-	private $objConfig       = null;
-	protected $strTemplate   = 'mod_shoutbox';
-	protected $entryTemplate = 'shoutbox_entry';
+    private $lockInSeconds     = 10;
+    private $loggedIn          = false;
+	private $isAjax            = null;
+    private $message           = '';
+	protected $strTemplate     = 'mod_shoutbox';
+    protected $entryTemplate   = 'shoutbox_entry';
+
 
     private function getEntries() {
-        $result = $this->Database->prepare("SELECT * FROM tl_shoutbox_entries WHERE pid = ? ORDER BY datim DESC")
+        $result = $this->Database->prepare("SELECT tl_shoutbox_entries.*, "
+            ."tl_member.username AS username, CONCAT(tl_member.firstname, ' ', tl_member.lastname) AS fullname"
+            ." FROM tl_shoutbox_entries, tl_member"
+            ." WHERE pid = ? AND tl_shoutbox_entries.member = tl_member.id"
+            ." ORDER BY datim DESC")
             ->limit($this->shoutbox_entries)->execute($this->shoutbox_id);
         $strContent = "";
+
         $objPartial = new FrontendTemplate($this->entryTemplate);
         while($result->next()) {
-            $row = $result->row();
+            $row              = $result->row();
+            $row['date']      = Date::parse($GLOBALS['TL_CONFIG']['datimFormat'], $row['datim']);
+            $row['timesince'] = $this->timesince($row['datim']);
+
             $objPartial->setData($row);
             $strContent .= $objPartial->parse();
         }
-        $strContent = $this->replaceInsertTags($strContent);
         $strContent = $this->emoticon_replacer($strContent);
+        $strContent = $this->replaceInsertTags($strContent);
         return $strContent;
     }
 
     protected function compile() {
+        global $objPage;
         $this->import('FrontendUser', 'User');
+        $this->isAjax   = Environment::get('isAjaxRequest');
         $this->loggedIn = FE_USER_LOGGED_IN;
 
-        $action  = Input::get('shoutbox_action');
-
-        if ($action === 'update') {
-            $new_entries = $this->getNewEntries();
-            $this->output($new_entries);
+        if (Input::get('shoutbox_action') === 'update' && $this->isAjax) {
+            $this->output($this->getEntries());
         }
 
-		if ($action === 'shout' && $this->loggedIn) {
-            $this->addEntry();
-            // AJAX Request?
+		if (Input::post('shoutbox_action') === 'shout' && $this->loggedIn) {
+            $addedEntry = $this->addEntry();
+            if ($this->isAjax) {
+                $jsonObj              = new stdClass();
+                $jsonObj->token       = REQUEST_TOKEN;
+                $jsonObj->entriesHtml = $this->getEntries();
+                $jsonObj->addedEntry  = $addedEntry;
+                $jsonObj->message     = $this->message;
+                $this->output(json_encode($jsonObj), true);
+            }
+            // TODO Redirect um POST data zu entfernen
 		}
 
-        $GLOBALS['TL_CSS'][] 		 = 'system/modules/shoutbox/assets/shoutbox.css|all,screen|static';
-        $GLOBALS['TL_JAVASCRIPT'][]  = 'system/modules/shoutbox/assets/shoutbox.js';
+        $GLOBALS['TL_CSS'][] = 'system/modules/shoutbox/assets/shoutbox.css|all,screen|static';
 
-        $this->Template->action      = Environment::get('indexFreeRequest');
-        $this->Template->loggedIn    = $this->loggedIn;
-        $this->template->entries     = $this->getEntries();
-	}
+        // mootools und jquery version
+        if ($objPage->hasJQuery) {
+            $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/j_shoutbox.js';
+        }
+        if ($objPage->hasMooTools) {
+            $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/m_shoutbox.js';
+        }
 
-	private function output($content, $jsonHeader = false) {
-		header('HTTP/1.0 200 OK');
-		if ($jsonHeader) {
-			header('Content-type: application/json');
-		}
-		echo $content;
-		exit;
+        if ($this->loggedIn && ($objPage->hasJQuery || $objPage->hasMooTools)) {
+            $GLOBALS['TL_BODY'][] = "<script>Shoutbox.init('shoutbox_".$this->shoutbox_id."');</script>";
+        }
+
+        $this->Template->action         = Environment::get('indexFreeRequest');
+        $this->Template->loggedIn       = $this->loggedIn;
+        $this->Template->hasJavascript  = ($objPage->hasJQuery || $objPage->hasMooTools);
+        $this->Template->message        = $this->message;
+        $this->Template->entries        = $this->getEntries();
 	}
 
 
     private function addEntry() {
-        $entry = $this->parseEntry(Input::post('shoutbox_entry'));
+        $now    = time();
+        $result = $this->Database->prepare('SELECT tstamp FROM tl_shoutbox_entries'
+            .' WHERE member = ? ORDER BY tstamp DESC')->limit(1)->execute($this->User->id);
+
+        if ($result->numRows == 1) {
+            $diff = $result->tstamp + $this->lockInSeconds - $now;
+            if ($diff > 0) {
+                $this->message = sprintf($GLOBALS['TL_LANG']['FMD']['shoutbox_locked_message'], $diff);
+                return false;
+            }
+        }
+
+        $entry = $this->parseEntry(Input::post('shoutbox_entry'), true);
+        $sql   = 'INSERT INTO tl_shoutbox_entries (pid, tstamp, member, datim, entry) VALUES(?, ?, ?, ?, ?)';
+        $this->Database->prepare($sql)->execute($this->shoutbox_id, $now, $this->User->id, $now, $entry);
+        return true;
     }
 
 
     private function parseEntry($entry) {
-        $img   = '[img]'.$this->Environment->base.'/system/modules/shoutbox/assets/link.png[/img]';
-        $entry = preg_replace('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', '[url=http$4://$5$6] '.$img.' [/url]', $entry);
+        $this->import('Comments');
+
+        // Convert links
+        function shoutbox_link_icon($arr) {
+            $host     = parse_url($arr[0], PHP_URL_HOST);
+            $host     = (strpos($host, 'www.') === 0) ? str_replace('www.', '', $host) : $host;
+            return sprintf('<a target="_blank" href="%s" title="%s"><span class="link_icon %s"></span></a>',
+                $arr[0], $arr[0], standardize($host), $arr[0]);
+        }
+        $entry  = preg_replace_callback(
+            '/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', 'shoutbox_link_icon', $entry);
+
+        $entry  = preg_replace('@\n\n+@', "\n\n", $entry);
+        $entry  = $this->Comments->parseBbCode($entry);
+        $entry  = $this->Comments->convertLineFeeds($entry);
         return $entry;
     }
 
-
     private function emoticon_replacer($input) {
-        $emoticons = array(":-)",";-(", ";-)", "]:-|", ":-(|)", ":o", ":)", ":(", ";)", "8)", "*JOKE*",
-            ":'(", ":|", ":-*", "*angel*");
+
+        $emoticons = array(":-&#41;",";-&#40;", ";-&#41;", "]:-|", ":-&#40;|&#41;", ":o", ":&#41;",
+            ":&#40;", ";&#41;", "8&#41;", "*JOKE*", ":'&#40;", ":|", ":-*", "*angel*");
         $emoticons_spans = array(
             '<span title=":-)" class="emoticon emoticon-1"></span>',
             '<span title=":-(" class="emoticon emoticon-2"></span>',
             '<span title=";-)" class="emoticon emoticon-3"></span>',
             '<span title="]:-|" class="emoticon emoticon-10"></span>',
-            '<span title=":-(|)" class="emoticon emoticon-11"></span>','<span title=":o" class="emoticon emoticon-12"></span>',
-            '<span title=":)" class="emoticon emoticon-1"></span>', '<span title=":(" class="emoticon emoticon-2"></span>',
-            '<span title=";)" class="emoticon emoticon-3"></span>', '<span title="8)" class="emoticon emoticon-4"></span>',
-            '<span title="*JOKE*" class="emoticon emoticon-5"></span>', '<span title=":\'(" class="emoticon emoticon-6"></span>',
-            '<span title=":|" class="emoticon emoticon-7"></span>', '<span title=":-*" class="emoticon emoticon-8"></span>',
+            '<span title=":-(|)" class="emoticon emoticon-11"></span>',
+            '<span title=":o" class="emoticon emoticon-12"></span>',
+            '<span title=":)" class="emoticon emoticon-1"></span>',
+            '<span title=":(" class="emoticon emoticon-2"></span>',
+            '<span title=";)" class="emoticon emoticon-3"></span>',
+            '<span title="8)" class="emoticon emoticon-4"></span>',
+            '<span title="*JOKE*" class="emoticon emoticon-5"></span>',
+            '<span title=":\'(" class="emoticon emoticon-6"></span>',
+            '<span title=":|" class="emoticon emoticon-7"></span>',
+            '<span title=":-*" class="emoticon emoticon-8"></span>',
             '<span title="*angel*" class="emoticon emoticon-9"></span>',
         );
         return str_replace($emoticons, $emoticons_spans, $input);
@@ -126,10 +184,10 @@ class Shoutbox extends Module {
 
         $strComment = $arrSet['comment'];
 
-        $objEmail = new Email();
-        $objEmail->from = $GLOBALS['TL_ADMIN_EMAIL'];
+        $objEmail           = new Email();
+        $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
         $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
-        $objEmail->subject = sprintf($GLOBALS['TL_LANG']['MSC']['com_subject'], $this->Environment->host);
+        $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['MSC']['com_subject'], $this->Environment->host);
 
         // Convert the comment to plain text
         $strComment = strip_tags($strComment);
@@ -147,6 +205,33 @@ class Shoutbox extends Module {
         // TODO Könnte man noch konfigurieren
         $objEmail->sendTo($GLOBALS['TL_ADMIN_EMAIL']);
         return true;
+    }
+
+
+    private function output($content, $jsonHeader = false) {
+        header('HTTP/1.0 200 OK');
+        if ($jsonHeader) {
+            header('Content-type: application/json');
+        }
+        echo $content;
+        exit;
+    }
+
+    public function timesince($timestamp) {
+        $diff       = time() - $timestamp;
+        $lengths    = array("60","60","24","7","4.35","12","10");
+
+        for($j = 0; $diff >= $lengths[$j] && $j < sizeof($lengths); $j++) {
+            $diff /= $lengths[$j];
+        }
+
+        $format       = &$GLOBALS['TL_LANG']['FMD']['shoutbox_timesince_format'];
+        $langSingular = &$GLOBALS['TL_LANG']['FMD']['shoutbox_timesince'];
+        $langPlural   = &$GLOBALS['TL_LANG']['FMD']['shoutbox_timesince_plural'];
+        $diff         = round($diff);
+        $period       = ($diff == 1) ? $langSingular[$j] : $langPlural[$j];
+
+        return sprintf($format, $diff.' '.$period);
     }
 
 }

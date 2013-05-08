@@ -52,6 +52,15 @@
 	margin:20px auto;	
 }
 
+.shoutbox div.entries a span.link_icon {
+    display:inline-block;
+    background:transparent url('link.png') no-repeat top left;
+    text-indent: -9999px;
+    width: 16px;
+    height: 16px;
+    margin:0;
+    padding:0;
+}
 
 .shoutbox div.entries {
 	background:#eee;

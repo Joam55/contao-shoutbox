@@ -1,119 +1,131 @@
 /* Shoutbox
- * (c) 2011-2012 Martin Kozianka <http://kozianka.de>
+ * (c) 2011-2013 Martin Kozianka <http://kozianka.de>
  *-------------------------------------------------------------------*/
- 
-
-.shoutbox p.info,
-.shoutbox div.entries,
-.shoutbox textarea, 
-.shoutbox button {
-	display:block;
-	width:220px;
-	margin:4px auto;
+.mod_shoutbox {
+    display:block;
+    padding:8px;
+    font-family:'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
+    font-size:11px;
+    line-height:normal;
+    margin:10px 0 0 0;
 }
 
-.shoutbox .menubar {
-	display:block;
-	width:220px;
-	margin:0 auto;	
-	padding: 0;
-	text-align:right;
-
+.mod_shoutbox .menubar {
+    text-align:right;
 }
 
-.shoutbox .menubar button {
-	display:inline;
+.mod_shoutbox .menubar button {
+	display:inline-block;
+    text-indent: -99999px;
 	background:none;
 	border:none;
-	width:auto;
-	margin: 0;
-	padding: 0;
-}
-
-.shoutbox .smiley_legend {
-	margin:0 auto;
-}
-
-.shoutbox .smiley_legend ul.smiley_list {
-	text-align:center;
-	margin:0;
+    width:22px;
+    height:20px;
+	margin:0 0 0 0;
 	padding:0;
-}
-.shoutbox .smiley_legend .smiley_list li {
-	display:inline;
-	margin:0;
-	padding:0;
+    background-position:center center;
+    background-repeat:no-repeat;
 }
 
-.shoutbox {
-	font-family:'Lucida Grande', 'Lucida Sans Unicode', arial, sans-serif;
-	font-size:11px;
-	line-height:normal;
-	margin:20px auto;	
+.mod_shoutbox .menubar button.send {
+    background-image:url('/system/modules/shoutbox/assets/paper-plane.png');
+}
+.mod_shoutbox .menubar button.refresh {
+    background-image:url('/system/modules/shoutbox/assets/refresh.png');
 }
 
-.shoutbox div.entries a span.link_icon {
+.mod_shoutbox .txtarea .submit_layer {
+    display:none;
+    background:#ffffff url('/system/themes/default/images/loading.gif') no-repeat center center;
+    opacity:0.5;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:48px;
+    padding:5px 0;
+    z-index:100;
+}
+
+.mod_shoutbox .txtarea {
+    position:relative;
+    border:2px solid #ddd;
+    padding:5px;
+}
+.mod_shoutbox textarea {
+    border:none;
+    width:100%;
+    resize: none;
+    height:48px;
+}
+
+.mod_shoutbox div.entries a span.link_icon {
     display:inline-block;
     background:transparent url('link.png') no-repeat top left;
-    text-indent: -9999px;
+    text-indent: -99999px;
     width: 16px;
     height: 16px;
     margin:0;
     padding:0;
 }
 
-.shoutbox div.entries {
-	background:#eee;
+.mod_shoutbox div.entries {
+    height:320px;
 	display:block;
-	height:200px;
 	overflow:auto;
-	border:3px solid #ddd;
+    background:#eee;
+    border:1px solid #ddd;
 	color:#4F4F4F;
-	margin-top:0;
 }
 
-.shoutbox ul {
+.mod_shoutbox ul {
 	list-style:none;
 	margin:0;
 	padding:0;
 }
 
-.shoutbox li {
+.mod_shoutbox li {
 	padding:1px 3px;
 }
 
-
-.shoutbox p.info {
+.mod_shoutbox p.info {
 	display:block;	
 	background-color:#333;
 	color:#fff;
 	padding:4px;
 	text-align:center;
-	
 }
 
-.shoutbox button {
-	display:block;
-	border:1px solid #ccc;
-	padding:2px;
-}
-
-.shoutbox p {
+.mod_shoutbox p {
 	margin:0 0 4px 0;
 	padding:0;
-	
 	word-wrap:break-word;
 	text-wrap:suppress;
 	word-break:break-strict;
 }
 
-.shoutbox strong.username {
+.mod_shoutbox strong.username {
 	color:#333;
 	font-weight:bold;
 }
 
 
-.shoutbox span.emoticon {
+.mod_shoutbox .smiley_legend {
+    margin:4px auto;
+}
+
+.mod_shoutbox .smiley_legend ul.smiley_list {
+    text-align:center;
+    margin:0;
+    padding:0;
+}
+.mod_shoutbox .smiley_legend .smiley_list li {
+    display:inline;
+    margin:0;
+    padding:0;
+}
+
+.mod_shoutbox span.emoticon {
    display:inline-block;
    background:transparent url('emoticons.png') no-repeat top left;
    width: 16px;
@@ -122,16 +134,17 @@
    padding:0;
 }
 
-.shoutbox span.emoticon-1  { background-position: 0 1px;    } 
-.shoutbox span.emoticon-2  { background-position: 0 -143px; } 
-.shoutbox span.emoticon-3  { background-position: 0 -179px; } 
-.shoutbox span.emoticon-4  { background-position: 0 -215px; } 
-.shoutbox span.emoticon-5  { background-position: 0 -251px; } 
-.shoutbox span.emoticon-6  { background-position: 0 -287px; } 
-.shoutbox span.emoticon-7  { background-position: 0 -323px; } 
-.shoutbox span.emoticon-8  { background-position: 0 -359px; } 
-.shoutbox span.emoticon-9  { background-position: 0 -396px; } 
-.shoutbox span.emoticon-10 { background-position: 0 -35px;  } 
-.shoutbox span.emoticon-11 { background-position: 0 -71px;  } 
-.shoutbox span.emoticon-12 { background-position: 0 -107px; } 
+.mod_shoutbox span.emoticon-1  { background-position: 0 1px;    }
+.mod_shoutbox span.emoticon-2  { background-position: 0 -143px; }
+.mod_shoutbox span.emoticon-3  { background-position: 0 -179px; }
+.mod_shoutbox span.emoticon-4  { background-position: 0 -215px; }
+.mod_shoutbox span.emoticon-5  { background-position: 0 -251px; }
+.mod_shoutbox span.emoticon-6  { background-position: 0 -287px; }
+.mod_shoutbox span.emoticon-7  { background-position: 0 -323px; }
+.mod_shoutbox span.emoticon-8  { background-position: 0 -359px; }
+.mod_shoutbox span.emoticon-9  { background-position: 0 -396px; }
+.mod_shoutbox span.emoticon-10 { background-position: 0 -35px;  }
+.mod_shoutbox span.emoticon-11 { background-position: 0 -71px;  }
+.mod_shoutbox span.emoticon-12 { background-position: 0 -107px; }
+
 

@@ -9,7 +9,7 @@ var Shoutbox = (function() {
 
         refresh: function(sbId) {
             var shoutbox_id = '#' + sbId;
-            var action      = $(shoutbox_id+' form').get('action');
+            var action      = $(shoutbox_id+' form').attr('action');
 
             if ((typeof action) !== 'string') {
                 action ='';
@@ -68,10 +68,14 @@ var Shoutbox = (function() {
                 // Prevent the submit event
                 e.preventDefault();
 
+
+
                 $(shoutbox_id+' button.submit').attr('disabled', 'disabled');
+                $(shoutbox_id+' .submit_layer').show();
 
                 if ($(shoutbox_id+'_textarea').val().length == 0) {
                     $(shoutbox_id+' button.submit').attr('disabled', null);
+                    $(shoutbox_id+' .submit_layer').hide();
                     return false;
                 }
 
@@ -93,6 +97,7 @@ var Shoutbox = (function() {
                     }
 
                     $(shoutbox_id+' button.submit').attr('disabled', null);
+                    $(shoutbox_id+' .submit_layer').hide();
                 }, 'json');
 
 

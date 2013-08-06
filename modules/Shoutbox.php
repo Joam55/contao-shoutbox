@@ -47,10 +47,13 @@ class Shoutbox extends Module {
             ->limit($this->shoutbox_entries)->execute($this->shoutbox_id);
         $strContent = "";
 
+
+
         $objPartial = new FrontendTemplate($this->entryTemplate);
         while($result->next()) {
             $row              = $result->row();
-            $row['date']      = Date::parse($GLOBALS['TL_CONFIG']['datimFormat'], $row['datim']);
+            $format           = $GLOBALS['TL_CONFIG']['datimFormat'];
+            $row['date']      = Date::parse($format, $row['datim']);
             $row['timesince'] = $this->timesince($row['datim']);
 
             $objPartial->setData($row);

@@ -124,9 +124,11 @@ class Shoutbox extends Module {
             }
         }
 
-        $entry = $this->parseEntry(Input::post('shoutbox_entry'), true);
-        $sql   = 'INSERT INTO tl_shoutbox_entries (pid, tstamp, member, datim, entry) VALUES(?, ?, ?, ?, ?)';
-        $this->Database->prepare($sql)->execute($this->shoutbox_id, $now, $this->User->id, $now, $entry);
+        $entry  = $this->parseEntry(Input::post('shoutbox_entry'), true);
+        $sql    = 'INSERT INTO tl_shoutbox_entries (pid, tstamp, member, datim, entry) VALUES(?, ?, ?, ?, ?)';
+        $result = $this->Database->prepare($sql)->execute($this->shoutbox_id, $now, $this->User->id, $now, $entry);
+
+        $this->notifiy($result->insertId);
         return true;
     }
 
@@ -175,40 +177,44 @@ class Shoutbox extends Module {
     }
 
 
-    private function notifiy($insertId, $arrSet) {
+    private function notifiy($insertId) {
+        $result = $this->Database->prepare("SELECT
+            tl_shoutbox_entries.*,
+            tl_shoutbox.email AS email,
+            tl_member.username AS username,
+            tl_member.email AS useremail
+            FROM tl_shoutbox_entries, tl_shoutbox, tl_member
+            WHERE tl_shoutbox_entries.id = ?
+            AND tl_shoutbox_entries.member = tl_member.id
+            AND tl_shoutbox_entries.pid = tl_shoutbox.id")->execute($insertId);
+        if($result->numRows != 1) {
+            return false;
+        }
+        $data = (Object)$result->row();
 
-        // Check if notification is activated
-        $result = $this->Database->prepare("SELECT shoutbox_notification"
-            ." FROM tl_module WHERE shoutbox_id = ? AND type = ?")
-            ->execute($arrSet['parent'], 'shoutbox');
-        if($result->numRows) {
-            if ($result->shoutbox_notification != '1') {
-                return false;
-            }
+        if (!Validator::isEmail($data->email)) {
+            return false;
         }
 
-        $strComment = $arrSet['comment'];
+        // Convert the comment to plain text
+        $strComment = strip_tags($data->entry);
+        $strComment = String::decodeEntities($strComment);
+        $strComment = str_replace(array('[&]', '[lt]', '[gt]'), array('&', '<', '>'), $strComment);
 
         $objEmail           = new Email();
         $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
         $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
-        $objEmail->subject  = sprintf($GLOBALS['TL_LANG']['MSC']['com_subject'], $this->Environment->host);
-
-        // Convert the comment to plain text
-        $strComment = strip_tags($strComment);
-        $strComment = $this->String->decodeEntities($strComment);
-        $strComment = str_replace(array('[&]', '[lt]', '[gt]'), array('&', '<', '>'), $strComment);
+        $objEmail->subject  = "New shoutbox entry from ".$data->username.' ('.$data->useremail.')';
 
         // Add comment details
         $objEmail->text = sprintf($GLOBALS['TL_LANG']['MSC']['com_message'],
-            $arrSet['name'] . ' (' . $arrSet['email'] . ')',
+            $data->username . ' (' . $data->useremail . ')',
             $strComment,
-            $this->Environment->base . $this->Environment->request,
-            $this->Environment->base . 'contao/main.php?do=comments&act=edit&id=' . $insertId);
+            Environment::get('base'). $this->Environment->request,
+            Environment::get('base'). 'main.php?do=shoutbox&table=tl_shoutbox_entries&id='.$data->pid
+        );
 
-        // TODO Sollte die Adresse aus der Rootseite sein
-        // TODO Könnte man noch konfigurieren
-        $objEmail->sendTo($GLOBALS['TL_ADMIN_EMAIL']);
+        $objEmail->sendTo($data->email);
         return true;
     }
 

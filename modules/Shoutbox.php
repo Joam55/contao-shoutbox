@@ -67,6 +67,8 @@ class Shoutbox extends Module {
     protected function compile() {
         global $objPage;
         $this->import('FrontendUser', 'User');
+        $this->import('Comments');
+
         $this->isAjax   = Environment::get('isAjaxRequest');
         $this->loggedIn = FE_USER_LOGGED_IN;
 
@@ -130,7 +132,6 @@ class Shoutbox extends Module {
 
 
     private function parseEntry($entry) {
-        $this->import('Comments');
 
         // Convert links
         function shoutbox_link_icon($arr) {
@@ -143,6 +144,7 @@ class Shoutbox extends Module {
             '/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', 'shoutbox_link_icon', $entry);
 
         $entry  = preg_replace('@\n\n+@', "\n\n", $entry);
+
         $entry  = $this->Comments->parseBbCode($entry);
         $entry  = $this->Comments->convertLineFeeds($entry);
         return $entry;

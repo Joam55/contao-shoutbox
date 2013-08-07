@@ -125,7 +125,7 @@ class Shoutbox extends Module {
         }
 
         $entry  = $this->parseEntry(Input::post('shoutbox_entry'), true);
-        $sql    = 'INSERT INTO tl_shoutbox_entries (pid, tstamp, member, datim, entry) VALUES(?, ?, ?, ?, ?)';
+        $sql    = "INSERT INTO tl_shoutbox_entries (pid, tstamp, member, datim, entry) VALUES(?, ?, ?, ?, ?)";
         $result = $this->Database->prepare($sql)->execute($this->shoutbox_id, $now, $this->User->id, $now, $entry);
 
         $this->notifiy($result->insertId);
@@ -178,7 +178,7 @@ class Shoutbox extends Module {
 
 
     private function notifiy($insertId) {
-        $result = $this->Database->prepare("SELECT
+        $result = $this->Database->prepare('SELECT
             tl_shoutbox_entries.*,
             tl_shoutbox.email AS email,
             tl_member.username AS username,
@@ -186,7 +186,7 @@ class Shoutbox extends Module {
             FROM tl_shoutbox_entries, tl_shoutbox, tl_member
             WHERE tl_shoutbox_entries.id = ?
             AND tl_shoutbox_entries.member = tl_member.id
-            AND tl_shoutbox_entries.pid = tl_shoutbox.id")->execute($insertId);
+            AND tl_shoutbox_entries.pid = tl_shoutbox.id')->execute($insertId);
         if($result->numRows != 1) {
             return false;
         }
@@ -211,7 +211,7 @@ class Shoutbox extends Module {
             $data->username . ' (' . $data->useremail . ')',
             $strComment,
             Environment::get('base'). $this->Environment->request,
-            Environment::get('base'). 'main.php?do=shoutbox&table=tl_shoutbox_entries&id='.$data->pid
+            Environment::get('base'). 'contao/main.php?do=shoutbox&table=tl_shoutbox_entries&id='.$data->pid
         );
 
         $objEmail->sendTo($data->email);

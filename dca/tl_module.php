@@ -28,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_id'] = array(
 	'inputType'		=> 'select',
     'foreignKey'    => 'tl_shoutbox.title',
 	'eval'			=> array('mandatory' => true, 'tl_class' => 'w50'),
-	'sql'           => "int(10) unsigned NOT NULL",
+	'sql'           => "int(10) unsigned NOT NULL default '0'",
 );
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['shoutbox_entries'] = array(

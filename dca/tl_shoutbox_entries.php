@@ -133,7 +133,7 @@ $GLOBALS['TL_DCA']['tl_shoutbox_entries'] = array(
             'sorting'                 => true,
             'flag'                    => 1,
             'inputType'               => 'textarea',
-            'eval'                    => array('mandatory'=>true, 'style'=> 'height:80px;'),
+            'eval'                    => array('mandatory'=>true, 'style'=> 'height:80px;', 'allowHtml' => true),
             'sql'                     => "text NULL",
         ),
 

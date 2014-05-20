@@ -15,14 +15,14 @@
 }
 
 .mod_shoutbox .menubar button {
-	display:inline-block;
+    display:inline-block;
     text-indent: -99999px;
-	background:none;
-	border:none;
+    background:none;
+    border:none;
     width:22px;
     height:20px;
-	margin:0 0 0 0;
-	padding:0;
+    margin:0 0 0 0;
+    padding:0;
     background-position:center center;
     background-repeat:no-repeat;
 }
@@ -70,43 +70,43 @@
 }
 
 .mod_shoutbox div.entries {
-    height:320px;
-	display:block;
-	overflow:auto;
+    height:180px;
+    display:block;
+    overflow:auto;
     background:#eee;
     border:1px solid #ddd;
-	color:#4F4F4F;
+    color:#4F4F4F;
+    margin-bottom:10px;
 }
 
 .mod_shoutbox ul {
-	list-style:none;
-	margin:0;
-	padding:0;
+    list-style:none;
+    margin:0;
+    padding:0;
 }
 
 .mod_shoutbox li {
-	padding:1px 3px;
+    padding:1px 3px;
 }
 
-.mod_shoutbox p.info {
-	display:block;	
-	background-color:#333;
-	color:#fff;
-	padding:4px;
-	text-align:center;
+.mod_shoutbox span.info {
+    display:inline-block;
+    color:#aaaaaa;
+    font-size:12px;
+    text-align:center;
 }
 
 .mod_shoutbox p {
-	margin:0 0 4px 0;
-	padding:0;
-	word-wrap:break-word;
-	text-wrap:suppress;
-	word-break:break-strict;
+    margin:0 0 4px 0;
+    padding:0;
+    word-wrap:break-word;
+    text-wrap:suppress;
+    word-break:break-strict;
 }
 
 .mod_shoutbox strong.username {
-	color:#333;
-	font-weight:bold;
+    color:#333;
+    font-weight:bold;
 }
 
 
@@ -126,12 +126,12 @@
 }
 
 .mod_shoutbox span.emoticon {
-   display:inline-block;
-   background:transparent url('emoticons.png') no-repeat top left;
-   width: 16px;
-   height: 16px;
-   margin:0;
-   padding:0;
+    display:inline-block;
+    background:transparent url('emoticons.png') no-repeat top left;
+    width: 16px;
+    height: 16px;
+    margin:0;
+    padding:0;
 }
 
 .mod_shoutbox span.emoticon-1  { background-position: 0 1px;    }
@@ -146,5 +146,4 @@
 .mod_shoutbox span.emoticon-10 { background-position: 0 -35px;  }
 .mod_shoutbox span.emoticon-11 { background-position: 0 -71px;  }
 .mod_shoutbox span.emoticon-12 { background-position: 0 -107px; }
-
 

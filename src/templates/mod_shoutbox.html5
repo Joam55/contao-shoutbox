@@ -8,10 +8,11 @@
 
 
 <?php if (!$this->loggedIn): ?>
-    <p class="info">Bitte einloggen um etwas zu schreiben!</p>
+
     <form action="<?php echo $this->action; ?>" method="post"></form>
     <div class="menubar">
-        <button type="button" onclick="<?php echo ($this->hasJavascript) ? "Shoutbox.refresh('".$sb_id."');" : "location.reload();"; ?>"><img src="/system/themes/default/images/reload.gif"></button>
+        <span class="info">Bitte einloggen um etwas zu schreiben!</span>
+        <button type="button" class="refresh" onclick="<?php echo ($this->hasJavascript) ? "Shoutbox.refresh('".$sb_id."');" : "location.reload();"; ?>">Refresh</button>
     </div>
 <?php else: ?>
 

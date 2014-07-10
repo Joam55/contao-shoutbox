@@ -2,22 +2,22 @@
 
 /**
  * Contao Open Source CMS
- * Copyright (C) 2005-2013 Leo Feyer
+ * Copyright (C) 2005-2014 Leo Feyer
  *
  *
  * PHP version 5
- * @copyright  Martin Kozianka 2011-2013 <http://kozianka.de/>
+ * @copyright  Martin Kozianka 2011-2014 <http://kozianka.de/>
  * @author     Martin Kozianka <http://kozianka.de/>
  * @package    Shoutbox 
  * @license    LGPL 
  * @filesource
  */
-
+namespace ContaoShoutbox;
 
 /**
  * Class Shoutbox 
  *
- * @copyright  Martin Kozianka 2011-2013 <http://kozianka.de/>
+ * @copyright  Martin Kozianka 2011-2014 <http://kozianka.de/>
  * @author     Martin Kozianka <http://kozianka.de/> 
  * @package    Controller
  */
@@ -29,7 +29,7 @@
 .shoutbox div.entries a span.doodlecom     { background-color:lightblue; }
 */
 
-class Shoutbox extends Module {
+class ModuleShoutbox extends \Module {
     private $lockInSeconds     = 10;
     private $loggedIn          = false;
 	private $isAjax            = null;
@@ -49,11 +49,11 @@ class Shoutbox extends Module {
 
 
 
-        $objPartial = new FrontendTemplate($this->entryTemplate);
+        $objPartial = new \FrontendTemplate($this->entryTemplate);
         while($result->next()) {
             $row              = $result->row();
             $format           = $GLOBALS['TL_CONFIG']['datimFormat'];
-            $row['date']      = Date::parse($format, $row['datim']);
+            $row['date']      = \Date::parse($format, $row['datim']);
             $row['timesince'] = $this->timesince($row['datim']);
 
             $objPartial->setData($row);
@@ -103,7 +103,7 @@ class Shoutbox extends Module {
             $GLOBALS['TL_BODY'][] = "<script>Shoutbox.init('shoutbox_".$this->shoutbox_id."');</script>";
         }
 
-        $this->Template->action         = Environment::get('indexFreeRequest');
+        $this->Template->action         = \Environment::get('indexFreeRequest');
         $this->Template->loggedIn       = $this->loggedIn;
         $this->Template->hasJavascript  = ($objPage->hasJQuery || $objPage->hasMooTools);
         $this->Template->message        = $this->message;
@@ -192,16 +192,16 @@ class Shoutbox extends Module {
         }
         $data = (Object)$result->row();
 
-        if (!Validator::isEmail($data->email)) {
+        if (!\Validator::isEmail($data->email)) {
             return false;
         }
 
         // Convert the comment to plain text
         $strComment = strip_tags($data->entry);
-        $strComment = String::decodeEntities($strComment);
+        $strComment = \String::decodeEntities($strComment);
         $strComment = str_replace(array('[&]', '[lt]', '[gt]'), array('&', '<', '>'), $strComment);
 
-        $objEmail           = new Email();
+        $objEmail           = new \Email();
         $objEmail->from     = $GLOBALS['TL_ADMIN_EMAIL'];
         $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
         $objEmail->subject  = "New shoutbox entry from ".$data->username.' ('.$data->useremail.')';
@@ -210,8 +210,8 @@ class Shoutbox extends Module {
         $objEmail->text = sprintf($GLOBALS['TL_LANG']['MSC']['com_message'],
             $data->username . ' (' . $data->useremail . ')',
             $strComment,
-            Environment::get('base'). $this->Environment->request,
-            Environment::get('base'). 'contao/main.php?do=shoutbox&table=tl_shoutbox_entries&id='.$data->pid
+            \Environment::get('base'). \Environment::get('request'),
+            \Environment::get('base'). 'contao/main.php?do=shoutbox&table=tl_shoutbox_entries&id='.$data->pid
         );
 
         $objEmail->sendTo($data->email);

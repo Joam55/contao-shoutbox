@@ -15,9 +15,9 @@
     ],
     "support":{
         "email":"martin@kozianka.de",
-        "issues":"https://github.com/kozi/shoutbox/issues",
+        "issues":"https://github.com/kozi/contao-shoutbox/issues",
         "irc":"irc://irc.freenode.org/contao.dev",
-        "source":"https://github.com/kozi/shoutbox"
+        "source":"https://github.com/kozi/contao-shoutbox"
 
     },
     "require":{
@@ -28,12 +28,14 @@
         "contao-legacy/shoutbox": "*"
     },
     "autoload": {
-        "classmap": ["src/"]
+        "psr-0": {
+            "ContaoShoutbox": "src/"
+        }
     },
     "extra":{
         "contao": {
             "sources":{
-                "src": "system/modules/shoutbox"
+                "contao": "system/modules/shoutbox"
             }
         }
     }

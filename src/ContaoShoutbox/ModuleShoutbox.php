@@ -79,7 +79,7 @@ class ModuleShoutbox extends \Module {
 		if (\Input::post('shoutbox_action') === 'shout' && $this->loggedIn) {
             $addedEntry = $this->addEntry();
             if ($this->isAjax) {
-                $jsonObj              = new stdClass();
+                $jsonObj              = new \stdClass();
                 $jsonObj->token       = REQUEST_TOKEN;
                 $jsonObj->entriesHtml = $this->getEntries();
                 $jsonObj->addedEntry  = $addedEntry;
@@ -124,7 +124,7 @@ class ModuleShoutbox extends \Module {
             }
         }
 
-        $entry  = $this->parseEntry(Input::post('shoutbox_entry'), true);
+        $entry  = $this->parseEntry(\Input::post('shoutbox_entry'), true);
         $sql    = "INSERT INTO tl_shoutbox_entries (pid, tstamp, member, datim, entry) VALUES(?, ?, ?, ?, ?)";
         $result = $this->Database->prepare($sql)->execute($this->shoutbox_id, $now, $this->User->id, $now, $entry);
 
@@ -190,7 +190,7 @@ class ModuleShoutbox extends \Module {
         if($result->numRows != 1) {
             return false;
         }
-        $data = (Object)$result->row();
+        $data = (Object) $result->row();
 
         if (!\Validator::isEmail($data->email)) {
             return false;

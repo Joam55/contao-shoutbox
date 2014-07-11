@@ -72,11 +72,11 @@ class ModuleShoutbox extends \Module {
         $this->isAjax   = \Environment::get('isAjaxRequest');
         $this->loggedIn = FE_USER_LOGGED_IN;
 
-        if (Input::get('shoutbox_action') === 'update' && $this->isAjax) {
+        if (\Input::get('shoutbox_action') === 'update' && $this->isAjax) {
             $this->output($this->getEntries());
         }
 
-		if (Input::post('shoutbox_action') === 'shout' && $this->loggedIn) {
+		if (\Input::post('shoutbox_action') === 'shout' && $this->loggedIn) {
             $addedEntry = $this->addEntry();
             if ($this->isAjax) {
                 $jsonObj              = new stdClass();

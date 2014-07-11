@@ -69,7 +69,7 @@ class ModuleShoutbox extends \Module {
         $this->import('FrontendUser', 'User');
         $this->import('Comments');
 
-        $this->isAjax   = Environment::get('isAjaxRequest');
+        $this->isAjax   = \Environment::get('isAjaxRequest');
         $this->loggedIn = FE_USER_LOGGED_IN;
 
         if (Input::get('shoutbox_action') === 'update' && $this->isAjax) {

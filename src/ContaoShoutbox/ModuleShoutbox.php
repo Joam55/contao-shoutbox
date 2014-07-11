@@ -136,14 +136,12 @@ class ModuleShoutbox extends \Module {
     private function parseEntry($entry) {
 
         // Convert links
-        function shoutbox_link_icon($arr) {
-            $host     = parse_url($arr[0], PHP_URL_HOST);
-            $host     = (strpos($host, 'www.') === 0) ? str_replace('www.', '', $host) : $host;
-            return sprintf('<a target="_blank" href="%s" title="%s"><span class="link_icon %s"></span></a>',
-                $arr[0], $arr[0], standardize($host), $arr[0]);
-        }
-        $entry  = preg_replace_callback(
-            '/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', 'shoutbox_link_icon', $entry);
+        $entry  = preg_replace_callback('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', function ($arr) {
+                $host     = parse_url($arr[0], PHP_URL_HOST);
+                $host     = (strpos($host, 'www.') === 0) ? str_replace('www.', '', $host) : $host;
+                return sprintf('<a target="_blank" href="%s" title="%s"><span class="link_icon %s"></span></a>',
+                    $arr[0], $arr[0], standardize($host), $arr[0]);
+        }, $entry);
 
         $entry  = preg_replace('@\n\n+@', "\n\n", $entry);
 

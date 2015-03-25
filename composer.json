@@ -3,7 +3,6 @@
     "description":"Shoutbox",
     "keywords":["contao", "frontend", "shoutbox"],
     "type":"contao-module",
-    "homepage":"",
     "license":"LGPL-3.0+",
     "authors":[
         {
@@ -22,7 +21,8 @@
     },
     "require":{
         "php":">=5.3",
-        "contao/core":">=3.2,<4"
+        "contao/core":">=3.2,<4",
+        "emojione/emojione":"~1"
     },
     "replace":{
         "contao-legacy/shoutbox": "*"

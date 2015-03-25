@@ -1,4 +1,4 @@
-<li>
+<li class="<?php echo $this->cssClass; ?>">
 	<div class="head">
 		<strong class="username"><?php echo $this->username; ?></strong>
 		<em class="date">[<?php echo $this->timesince; ?>]</em>

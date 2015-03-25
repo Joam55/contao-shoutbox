@@ -2,11 +2,11 @@
 
 /**
  * Contao Open Source CMS
- * Copyright (C) 2005-2014 Leo Feyer
+ * Copyright (C) 2005-2015 Leo Feyer
  *
  *
  * PHP version 5
- * @copyright  Martin Kozianka 2011-2014 <http://kozianka.de/>
+ * @copyright  Martin Kozianka 2011-2015 <http://kozianka.de/>
  * @author     Martin Kozianka <http://kozianka.de/>
  * @package    Shoutbox 
  * @license    LGPL 
@@ -17,7 +17,7 @@ namespace ContaoShoutbox;
 /**
  * Class Shoutbox 
  *
- * @copyright  Martin Kozianka 2011-2014 <http://kozianka.de/>
+ * @copyright  Martin Kozianka 2011-2015 <http://kozianka.de/>
  * @author     Martin Kozianka <http://kozianka.de/> 
  * @package    Controller
  */
@@ -39,6 +39,8 @@ class ModuleShoutbox extends \Module {
 
 
     private function getEntries() {
+        $this->shoutbox_entries = 1000;
+
         $result = $this->Database->prepare("SELECT tl_shoutbox_entries.*, "
             ."tl_member.username AS username, CONCAT(tl_member.firstname, ' ', tl_member.lastname) AS fullname"
             ." FROM tl_shoutbox_entries, tl_member"
@@ -47,14 +49,14 @@ class ModuleShoutbox extends \Module {
             ->limit($this->shoutbox_entries)->execute($this->shoutbox_id);
         $strContent = "";
 
-
-
+        $i          = 0;
         $objPartial = new \FrontendTemplate($this->entryTemplate);
         while($result->next()) {
             $row              = $result->row();
             $format           = $GLOBALS['TL_CONFIG']['datimFormat'];
             $row['date']      = \Date::parse($format, $row['datim']);
             $row['timesince'] = $this->timesince($row['datim']);
+            $row['cssClass']  = 'entry '.(($i++ % 2 == 0) ? 'even': 'odd');
 
             $objPartial->setData($row);
             $strContent .= $objPartial->parse();
@@ -89,9 +91,11 @@ class ModuleShoutbox extends \Module {
             // TODO Redirect um POST data zu entfernen
 		}
 
-        $GLOBALS['TL_CSS'][] = 'system/modules/shoutbox/assets/shoutbox.css|all,screen|static';
+        $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/shoutbox.css|all,screen|static';
+        $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/fontello/css/fontello.css|all,screen|static';
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/iscroll/iscroll.js';
 
-        // mootools und jquery version
+        // mootools oder jquery version
         if ($objPage->hasJQuery) {
             $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/j_shoutbox.js';
         }
@@ -102,6 +106,8 @@ class ModuleShoutbox extends \Module {
         if ($this->loggedIn && ($objPage->hasJQuery || $objPage->hasMooTools)) {
             $GLOBALS['TL_BODY'][] = "<script>Shoutbox.init('shoutbox_".$this->shoutbox_id."');</script>";
         }
+
+
 
         $this->Template->action         = \Environment::get('indexFreeRequest');
         $this->Template->loggedIn       = $this->loggedIn;
@@ -151,27 +157,7 @@ class ModuleShoutbox extends \Module {
     }
 
     private function emoticon_replacer($input) {
-
-        $emoticons = array(":-&#41;",";-&#40;", ";-&#41;", "]:-|", ":-&#40;|&#41;", ":o", ":&#41;",
-            ":&#40;", ";&#41;", "8&#41;", "*JOKE*", ":'&#40;", ":|", ":-*", "*angel*");
-        $emoticons_spans = array(
-            '<span title=":-)" class="emoticon emoticon-1"></span>',
-            '<span title=":-(" class="emoticon emoticon-2"></span>',
-            '<span title=";-)" class="emoticon emoticon-3"></span>',
-            '<span title="]:-|" class="emoticon emoticon-10"></span>',
-            '<span title=":-(|)" class="emoticon emoticon-11"></span>',
-            '<span title=":o" class="emoticon emoticon-12"></span>',
-            '<span title=":)" class="emoticon emoticon-1"></span>',
-            '<span title=":(" class="emoticon emoticon-2"></span>',
-            '<span title=";)" class="emoticon emoticon-3"></span>',
-            '<span title="8)" class="emoticon emoticon-4"></span>',
-            '<span title="*JOKE*" class="emoticon emoticon-5"></span>',
-            '<span title=":\'(" class="emoticon emoticon-6"></span>',
-            '<span title=":|" class="emoticon emoticon-7"></span>',
-            '<span title=":-*" class="emoticon emoticon-8"></span>',
-            '<span title="*angel*" class="emoticon emoticon-9"></span>',
-        );
-        return str_replace($emoticons, $emoticons_spans, $input);
+        return \Emojione\Emojione::shortnameToImage($input);
     }
 
 

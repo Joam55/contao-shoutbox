@@ -1,0 +1,8 @@
+{
+  "name": "contao-shoutbox",
+  "dependencies": {
+    "daguike_iscroll": "~5",
+    "jquery-textcomplete": "*"
+
+  }
+}

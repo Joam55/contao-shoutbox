@@ -92,8 +92,7 @@ class ModuleShoutbox extends \Module {
 		}
 
         $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/shoutbox.css|all,screen|static';
-        $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/fontello/css/fontello.css|all,screen|static';
-        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/iscroll/iscroll.js';
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/bower_components/daguike_iscroll/build/iscroll.js';
 
         // mootools oder jquery version
         if ($objPage->hasJQuery) {

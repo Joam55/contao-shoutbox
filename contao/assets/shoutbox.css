@@ -55,37 +55,6 @@
     font-weight:bold;
 }
 
-
-.mod_shoutbox .smiley_legend {
-    margin:4px auto;
-}
-
-.mod_shoutbox .smiley_legend ul.smiley_list {
-    text-align:center;
-    margin:0;
-    padding:0;
-}
-.mod_shoutbox .smiley_legend .smiley_list li {
-    display:inline;
-    margin:0;
-    padding:0;
-}
-
-.mod_shoutbox span.emoticon {
-    display:inline-block;
-    background:transparent url('emoticons.png') no-repeat top left;
-    width: 16px;
-    height: 16px;
-    margin:0;
-    padding:0;
-}
-
-.mod_shoutbox .icon {
-    font-size:0.9rem;
-}
-.mod_shoutbox .icon-emo-devil { color:red; }
-.mod_shoutbox .icon-emo-happy { color:darkred; }
-
 .mod_shoutbox .txtarea .submit_layer {
     display:none;
     background:#ffffff url('/system/themes/default/images/loading.gif') no-repeat center center;
@@ -99,3 +68,17 @@
     z-index:100;
 }
 
+.mod_shoutbox .emojione {
+    /* Emoji Sizing */
+    font-size: inherit;
+    height: 2.4ex;
+
+    /* prevent img stretch */
+    width: auto;
+
+    /* Inline alignment adjust the margins  */
+    display: inline-block;
+    margin: .4ex .15em .2ex;
+    line-height: normal;
+    vertical-align: sub;
+}

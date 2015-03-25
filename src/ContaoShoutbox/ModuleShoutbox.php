@@ -30,6 +30,8 @@ namespace ContaoShoutbox;
 */
 
 class ModuleShoutbox extends \Module {
+    static $pathPrefix         = 'composer/vendor/emojione/emojione/assets/png/';
+
     private $lockInSeconds     = 10;
     private $loggedIn          = false;
 	private $isAjax            = null;
@@ -92,7 +94,7 @@ class ModuleShoutbox extends \Module {
 		}
 
         $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/shoutbox.css|all,screen|static';
-        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/bower_components/daguike_iscroll/build/iscroll.js';
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/iscroll/iscroll.js';
 
         // mootools oder jquery version
         if ($objPage->hasJQuery) {
@@ -105,8 +107,6 @@ class ModuleShoutbox extends \Module {
         if ($this->loggedIn && ($objPage->hasJQuery || $objPage->hasMooTools)) {
             $GLOBALS['TL_BODY'][] = "<script>Shoutbox.init('shoutbox_".$this->shoutbox_id."');</script>";
         }
-
-
 
         $this->Template->action         = \Environment::get('indexFreeRequest');
         $this->Template->loggedIn       = $this->loggedIn;
@@ -137,13 +137,15 @@ class ModuleShoutbox extends \Module {
         return true;
     }
 
-
     private function parseEntry($entry) {
 
         // Convert links
         $entry  = preg_replace_callback('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', function ($arr) {
                 $host     = parse_url($arr[0], PHP_URL_HOST);
                 $host     = (strpos($host, 'www.') === 0) ? str_replace('www.', '', $host) : $host;
+
+                echo static::emoticonCallback(array('', '2197'));
+                // img class="emojione"
                 return sprintf('<a target="_blank" href="%s" title="%s"><span class="link_icon %s"></span></a>',
                     $arr[0], $arr[0], standardize($host), $arr[0]);
         }, $entry);
@@ -156,9 +158,29 @@ class ModuleShoutbox extends \Module {
     }
 
     private function emoticon_replacer($input) {
-        return \Emojione\Emojione::shortnameToImage($input);
+        $strReplace   = '___REPLACE___';
+        $arrEmoticons = array(":-&#41;", ":&#41;", ";-&#41;", ";&#41;", ":-&#40;", ":&#40;");
+        $arrEmojione  = array(":smile:",":smile:", ":wink:", ":wink:", ":disappointed:", ":disappointed:");
+        $input        = str_replace($arrEmoticons, $arrEmojione, $input);
+
+        \Emojione\Emojione::$cacheBustParam = '';
+        \Emojione\Emojione::$imagePathPNG   = $strReplace;
+
+        $content = \Emojione\Emojione::shortnameToImage($input);
+        $content = preg_replace_callback('/'.$strReplace.'(.*)'.'\.png/Si', 'static::emoticonCallback', $content);
+
+        return $content;
     }
 
+    static function emoticonCallback($m) {
+
+        if((!is_array($m)) || (!isset($m[1])) || (empty($m[1]))) {
+            return $m[0];
+        }
+        $path   = static::$pathPrefix.$m[1].'.png';
+        $objImg = \Image::create($path);
+        return \Image::get($path, '64', '64', '', $objImg->getCacheName(), true);
+    }
 
     private function notifiy($insertId) {
         $result = $this->Database->prepare('SELECT

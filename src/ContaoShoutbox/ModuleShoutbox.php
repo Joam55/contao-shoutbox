@@ -158,10 +158,11 @@ class ModuleShoutbox extends \Module {
                 $host     = parse_url($arr[0], PHP_URL_HOST);
                 $host     = (strpos($host, 'www.') === 0) ? str_replace('www.', '', $host) : $host;
 
-                echo static::emoticonCallback(array('', '2197'));
-                // img class="emojione"
-                return sprintf('<a target="_blank" href="%s" title="%s"><span class="link_icon %s"></span></a>',
-                    $arr[0], $arr[0], standardize($host), $arr[0]);
+                return sprintf('
+                    <a target="_blank" href="%s" title="%s"><img class="emojione" src="%s"></a>',
+                    $arr[0], $arr[0], standardize($host),
+                    static::emoticonCallback(array('', '2197'))
+                );
         }, $entry);
 
         $entry  = preg_replace('@\n\n+@', "\n\n", $entry);

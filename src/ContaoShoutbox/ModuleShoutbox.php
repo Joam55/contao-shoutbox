@@ -159,9 +159,8 @@ class ModuleShoutbox extends \Module {
                 $host     = (strpos($host, 'www.') === 0) ? str_replace('www.', '', $host) : $host;
 
                 return sprintf('
-                    <a target="_blank" href="%s" title="%s"><img class="emojione" src="%s"></a>',
-                    $arr[0], $arr[0], standardize($host),
-                    static::emoticonCallback(array('', '2197'))
+                            <a target="_blank" href="%s" title="%s"><img class="emojione" src="%s"></a>',
+                    $arr[0], $arr[0], static::emoticonCallback(array('', '2197'))
                 );
         }, $entry);
 

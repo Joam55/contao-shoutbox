@@ -16,3 +16,4 @@ $GLOBALS['TL_LANG']['FMD']['shoutbox_locked_message']       = 'Neuer Shoutbox Ei
 $GLOBALS['TL_LANG']['FMD']['shoutbox_timesince_format']     = "vor %s";
 $GLOBALS['TL_LANG']['FMD']['shoutbox_timesince']            = array("Sekunde", "Minute", "Stunde", "Tag", "Woche", "Monat", "Jahr", "Jahrzehnt");
 $GLOBALS['TL_LANG']['FMD']['shoutbox_timesince_plural']     = array("Sekunden", "Minuten", "Stunden", "Tagen", "Wochen", "Monaten", "Jahren", "Jahrzehnten");
+$GLOBALS['TL_LANG']['FMD']['shoutbox_no_access']            = 'Kein Zugriff!';

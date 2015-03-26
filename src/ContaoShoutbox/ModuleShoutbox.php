@@ -21,16 +21,8 @@ namespace ContaoShoutbox;
  * @author     Martin Kozianka <http://kozianka.de/> 
  * @package    Controller
  */
-
-
-/* TODO IDEA Generate css file with icon definition from given folder
-.shoutbox div.entries a span.facebookcom   { background-color:blue;}
-.shoutbox div.entries a span.googlecom     { background-color:burlywood;}
-.shoutbox div.entries a span.doodlecom     { background-color:lightblue; }
-*/
-
 class ModuleShoutbox extends \Module {
-    static $pathPrefix         = 'composer/vendor/emojione/emojione/assets/png/';
+    static $emojionePath       = 'composer/vendor/emojione/emojione/assets/png/';
 
     private $lockInSeconds     = 10;
     private $loggedIn          = false;
@@ -41,7 +33,6 @@ class ModuleShoutbox extends \Module {
 
 
     private function getEntries() {
-        $this->shoutbox_entries = 1000;
 
         $result = $this->Database->prepare("SELECT tl_shoutbox_entries.*, "
             ."tl_member.username AS username, CONCAT(tl_member.firstname, ' ', tl_member.lastname) AS fullname"
@@ -80,7 +71,15 @@ class ModuleShoutbox extends \Module {
             $this->output($this->getEntries());
         }
 
-		if (\Input::post('shoutbox_action') === 'shout' && $this->loggedIn) {
+        // Keine Posten wenn man nicht eingeloggt ist!
+        if (!$this->loggedIn && \Input::post('shoutbox_action') === 'shout' && $this->isAjax) {
+            $jsonObj              = new \stdClass();
+            $jsonObj->token       = REQUEST_TOKEN;
+            $jsonObj->message     = $GLOBALS['TL_LANG']['FMD']['shoutbox_no_access'];
+            $this->output(json_encode($jsonObj), true);
+        }
+
+        if (\Input::post('shoutbox_action') === 'shout' && $this->loggedIn) {
             $addedEntry = $this->addEntry();
             if ($this->isAjax) {
                 $jsonObj              = new \stdClass();
@@ -93,26 +92,41 @@ class ModuleShoutbox extends \Module {
             // TODO Redirect um POST data zu entfernen
 		}
 
-        $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/shoutbox.css|all,screen|static';
-        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/iscroll/iscroll.js';
+        // iscroll
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/iscroll/iscroll.js|static';
 
-        // mootools oder jquery version
-        if ($objPage->hasJQuery) {
-            $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/j_shoutbox.js';
-        }
-        if ($objPage->hasMooTools) {
-            $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/m_shoutbox.js';
-        }
+        // textcomplete
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/textcomplete/jquery.textcomplete.js|static';
+        $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/textcomplete/jquery.textcomplete.css||static';
 
-        if ($this->loggedIn && ($objPage->hasJQuery || $objPage->hasMooTools)) {
-            $GLOBALS['TL_BODY'][] = "<script>Shoutbox.init('shoutbox_".$this->shoutbox_id."');</script>";
-        }
+        // dropdown menu
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/shoutbox-dropdown.js|static';
+        $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/shoutbox-dropdown.css||static';
+
+        // shoutbox
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/shoutbox.js|static';
+        $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/shoutbox.css||static';
+
+        $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/fontello/css/fontello.css||static';
+
+
+        $this->Template->shoutboxCssId  = "shoutbox_".$this->shoutbox_id;
+        $this->Template->jsObj          = "Shoutbox".$this->shoutbox_id;
 
         $this->Template->action         = \Environment::get('indexFreeRequest');
         $this->Template->loggedIn       = $this->loggedIn;
-        $this->Template->hasJavascript  = ($objPage->hasJQuery || $objPage->hasMooTools);
+        $this->Template->hasJavascript  = $objPage->hasJQuery;
+
         $this->Template->message        = $this->message;
         $this->Template->entries        = $this->getEntries();
+
+        $GLOBALS['TL_BODY'][] = "
+            <script>
+                var ".$this->Template->jsObj." = new Shoutbox('".$this->Template->shoutboxCssId."');
+            </script>
+        ";
+
+
 	}
 
 
@@ -160,7 +174,7 @@ class ModuleShoutbox extends \Module {
     private function emoticon_replacer($input) {
         $strReplace   = '___REPLACE___';
         $arrEmoticons = array(":-&#41;", ":&#41;", ";-&#41;", ";&#41;", ":-&#40;", ":&#40;");
-        $arrEmojione  = array(":smile:",":smile:", ":wink:", ":wink:", ":disappointed:", ":disappointed:");
+        $arrEmojione  = array(":smiley:",":smiley:", ":wink:", ":wink:", ":disappointed:", ":disappointed:");
         $input        = str_replace($arrEmoticons, $arrEmojione, $input);
 
         \Emojione\Emojione::$cacheBustParam = '';
@@ -177,7 +191,7 @@ class ModuleShoutbox extends \Module {
         if((!is_array($m)) || (!isset($m[1])) || (empty($m[1]))) {
             return $m[0];
         }
-        $path   = static::$pathPrefix.$m[1].'.png';
+        $path   = static::$emojionePath.$m[1].'.png';
         $objImg = \Image::create($path);
         return \Image::get($path, '64', '64', '', $objImg->getCacheName(), true);
     }

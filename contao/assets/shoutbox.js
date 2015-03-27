@@ -38,17 +38,16 @@ Shoutbox = function(strId) {
 
             if (jsonObj.addedEntry) {
                 $('textarea', $form).val('');
+                sbObj.scrollList.scrollTo(0, 0);
+                sbObj.shake();
             }
             else {
                 alert(jsonObj.message);
             }
+
             $('button', $form).attr('disabled', null);
-
             sbObj.blockLayer.hide();
-
-            sbObj.scrollList.scrollTo(0, 0);
-            sbObj.shake();
-
+            
         }, 'json');
     });
 
@@ -76,10 +75,10 @@ Shoutbox.prototype = {
 
     shake: function() {
         $list = $(this.id + ' .entries');
-        for(var iter = 0;iter < 5;iter++) {
-            $list.animate({ left:((iter % 2 == 0 ? 10 : -10)) }, 100);
+        for(var iter = 0;iter < 3;iter++) {
+            $list.animate({ top:((iter % 2 == 0 ? 10 : -10)) }, 50);
         }
-        $list.animate({left: 0}, 100);
+        $list.animate({top: 0}, 50);
     } // END shake
 }
 

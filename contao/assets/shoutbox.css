@@ -22,6 +22,7 @@
 
 .mod_shoutbox button.refresh:hover { color:#228b28; }
 .mod_shoutbox button.submit:hover  { color:#0069d6; }
+.mod_shoutbox button.emoji:hover   { color:#fbb041; }
 
 .mod_shoutbox textarea {
     box-sizing: border-box;

@@ -22,7 +22,7 @@ namespace ContaoShoutbox;
  * @package    Controller
  */
 class ModuleShoutbox extends \Module {
-    static $emojionePath       = 'composer/vendor/emojione/emojione/assets/png/';
+    static $emojionePath       = 'composer/vendor/emojione/emojione/';
 
     private $lockInSeconds     = 10;
     private $loggedIn          = false;
@@ -100,6 +100,7 @@ class ModuleShoutbox extends \Module {
         $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/textcomplete/jquery.textcomplete.css||static';
 
         // dropdown menu
+        $GLOBALS['TL_JAVASCRIPT'][] = $this->createEmojiStrategy().'|static';
         $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/shoutbox/assets/shoutbox-dropdown.js|static';
         $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/shoutbox-dropdown.css||static';
 
@@ -108,7 +109,6 @@ class ModuleShoutbox extends \Module {
         $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/shoutbox.css||static';
 
         $GLOBALS['TL_CSS'][]        = 'system/modules/shoutbox/assets/fontello/css/fontello.css||static';
-
 
         $this->Template->shoutboxCssId  = "shoutbox_".$this->shoutbox_id;
         $this->Template->jsObj          = "Shoutbox".$this->shoutbox_id;
@@ -191,9 +191,24 @@ class ModuleShoutbox extends \Module {
         if((!is_array($m)) || (!isset($m[1])) || (empty($m[1]))) {
             return $m[0];
         }
-        $path   = static::$emojionePath.$m[1].'.png';
+        $path   = static::$emojionePath.'assets/png/'.$m[1].'.png';
         $objImg = \Image::create($path);
         return \Image::get($path, '64', '64', '', $objImg->getCacheName(), true);
+    }
+
+    private function createEmojiStrategy() {
+        $strPath     = 'assets/js/shoutbox_emoji_strategy.js';
+        $strSource   = static::$emojionePath.'emoji_strategy.json';
+
+        if (!file_exists($strPath) && is_readable($strSource)) {
+            $contentTmpl       = "var emojiStrategy = %s;";
+            $jsonEmojiStrategy = file_get_contents($strSource);
+
+            $file = new \File($strPath);
+            $file->write(sprintf($contentTmpl, $jsonEmojiStrategy));
+            $file->close();
+        }
+        return $strPath;
     }
 
     private function notifiy($insertId) {

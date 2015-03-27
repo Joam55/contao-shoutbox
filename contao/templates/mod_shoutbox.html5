@@ -9,15 +9,16 @@
 
     <form action="<?php echo $this->action; ?>" method="post"></form>
     <div class="menubar">
-        <small class="info">Bitte einloggen um etwas zu schreiben!</small>
-        <button type="button" class="refresh" onclick="<?=$this->jsObj?>.refresh();"><i class="icon-arrows-cw"></i></button>
+        <small class="info"><?=$GLOBALS['TL_LANG']['FMD']['shoutbox_tip_login']?></small>
+        <button type="button" class="refresh simptip-position-left simptip-movable" data-tooltip="<?=$GLOBALS['TL_LANG']['FMD']['shoutbox_tip_refresh']?>" onclick="<?=$this->jsObj?>.refresh();"><i class="icon-arrows-cw"></i></button>
     </div>
 <?php else: ?>
 
+
 <form action="<?php echo $this->action; ?>" method="post">
     <div class="menubar">
-        <button type="button" class="refresh" onclick="<?=$this->jsObj?>.refresh();"><i class="icon-arrows-cw"></i></button>
-        <button type="submit" class="send submit"><i class="icon-paper-plane"></i></button>
+        <button type="button" class="refresh simptip-position-left simptip-movable" data-tooltip="<?=$GLOBALS['TL_LANG']['FMD']['shoutbox_tip_refresh']?>" onclick="<?=$this->jsObj?>.refresh();"><i class="icon-arrows-cw"></i></button>
+        <button type="submit" class="send submit simptip-position-left simptip-movable" data-tooltip="<?=$GLOBALS['TL_LANG']['FMD']['shoutbox_tip_submit']?>"><i class="icon-paper-plane"></i></button>
     </div>
 
 	<input type="hidden" class="request_token" name="REQUEST_TOKEN" value="{{request_token}}">

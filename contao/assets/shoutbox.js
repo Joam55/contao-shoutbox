@@ -29,7 +29,6 @@ Shoutbox = function(strId) {
         if ((typeof action) !== 'string') {
             action ='';
         }
-
         $.post(action, $form.serialize(), function(jsonObj) {
 
             console.log('jsonObj', jsonObj);
@@ -44,10 +43,13 @@ Shoutbox = function(strId) {
                 alert(jsonObj.message);
             }
             $('button', $form).attr('disabled', null);
+
             sbObj.blockLayer.hide();
 
-        }, 'json');
+            sbObj.scrollList.scrollTo(0, 0);
+            sbObj.shake();
 
+        }, 'json');
     });
 
 };
@@ -65,14 +67,20 @@ Shoutbox.prototype = {
         $.get(action + '?shoutbox_action=update', function(htmlString, textStatus, jqXHR) {
             if (htmlString.length > 0) {
                 $(sbObj.id + ' ul.list').html(htmlString);
-                sbObj.scrollList.scrollTo(0, 0, 1000, IScroll.utils.ease.elastic);
+                sbObj.scrollList.scrollTo(0, 0);
+                sbObj.shake();
                 $(sbObj.id + ' button.refresh').attr('disabled', null);
             }
         }, 'html');
+    }, // END refresh
 
-
-
-    }
+    shake: function() {
+        $list = $(this.id + ' .entries');
+        for(var iter = 0;iter < 5;iter++) {
+            $list.animate({ left:((iter % 2 == 0 ? 10 : -10)) }, 100);
+        }
+        $list.animate({left: 0}, 100);
+    } // END shake
 }
 
 /*----------------------------------------------------------------------------

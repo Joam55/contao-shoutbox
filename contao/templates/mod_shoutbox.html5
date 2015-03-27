@@ -5,7 +5,7 @@
 	<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 <?php endif;?>
 
-<?php if (false && !$this->loggedIn): ?>
+<?php if (!$this->loggedIn): ?>
 
     <form action="<?php echo $this->action; ?>" method="post"></form>
     <div class="menubar">

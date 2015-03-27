@@ -47,7 +47,7 @@ Shoutbox = function(strId) {
 
             $('button', $form).attr('disabled', null);
             sbObj.blockLayer.hide();
-            
+
         }, 'json');
     });
 
@@ -82,72 +82,3 @@ Shoutbox.prototype = {
     } // END shake
 }
 
-/*----------------------------------------------------------------------------
-
-var Shoutbox = (function() {
-
-    return {
-
-       init: function(sbId) {
-            var shoutbox_id = '#' + sbId;
-            // add ajax parameter and submit event
- var theForm = $(shoutbox_id+' form');
-
- var myScroll = new IScroll(shoutbox_id+'_entries');
-            console.log(shoutbox_id+'_entries');
-
-            var action = theForm.get('action');
-            if ((typeof action) !== 'string') {
-                action ='';
-            }
-
-            $('div.smiley_legend ul.smiley_list span').bind('click', function() {
-                Shoutbox.insertAtCursor(document.getElementById(sbId+'_textarea'), ' '+this.title);
-            });
-
-            theForm.bind('submit', function(e) {
-                // Prevent the submit event
-                e.preventDefault();
-
-
-
-                $(shoutbox_id+' button.submit').attr('disabled', 'disabled');
-                $(shoutbox_id+' .submit_layer').show();
-
-                if ($(shoutbox_id+'_textarea').val().length == 0) {
-                    $(shoutbox_id+' button.submit').attr('disabled', null);
-                    $(shoutbox_id+' .submit_layer').hide();
-                    return false;
-                }
-
-                $.post(action, theForm.serialize(), function(jsonObj, textStatus, jqXHR) {
-
-                    $(shoutbox_id+' input.request_token').attr('value', jsonObj.token);
-
-
-                    $(shoutbox_id + '_list').html(jsonObj.entriesHtml);
-                    $(shoutbox_id + '_entries').scrollTop(0);
-
-                    if (jsonObj.addedEntry) {
-                        // clear textarea
-                        $(shoutbox_id +'_textarea').val('');
-                    }
-                    else {
-                        // show message
-                        alert(jsonObj.message);
-                    }
-
-                    $(shoutbox_id+' button.submit').attr('disabled', null);
-                    $(shoutbox_id+' .submit_layer').hide();
-                }, 'json');
-
-
-            });
-        }
-
-    };
-
-
-})();
-
- ----------------------------------------------------------------------------*/

@@ -54,7 +54,8 @@ class ModuleShoutbox extends \Module {
             $objPartial->setData($row);
             $strContent .= $objPartial->parse();
         }
-        $strContent = $this->emoticon_replacer($strContent);
+        $strContent = $this->replaceEmoji($strContent);
+        $strContent = $this->generateLinkIcons($strContent);
         $strContent = $this->replaceInsertTags($strContent);
         return $strContent;
     }
@@ -129,7 +130,6 @@ class ModuleShoutbox extends \Module {
 
 	}
 
-
     private function addEntry() {
         $now    = time();
         $result = $this->Database->prepare('SELECT tstamp FROM tl_shoutbox_entries'
@@ -171,7 +171,16 @@ class ModuleShoutbox extends \Module {
         return $entry;
     }
 
-    private function emoticon_replacer($input) {
+    private function generateLinkIcons($input) {
+        $content = preg_replace_callback('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', function ($arr) {
+            return sprintf('<a target="_blank" href="%s" title="%s"><img class="emojione" src="%s"></a>',
+                $arr[0], $arr[0], static::emoticonCallback(array('', '2197'))
+            );
+        }, $input);
+        return $content;
+    }
+
+    private function replaceEmoji($input) {
         $strReplace   = '___REPLACE___';
         $arrEmoticons = array(":-&#41;", ":&#41;", ";-&#41;", ";&#41;", ":-&#40;", ":&#40;");
         $arrEmojione  = array(":smiley:",":smiley:", ":wink:", ":wink:", ":disappointed:", ":disappointed:");
@@ -187,31 +196,17 @@ class ModuleShoutbox extends \Module {
     }
 
     static function emoticonCallback($m) {
-
         if((!is_array($m)) || (!isset($m[1])) || (empty($m[1]))) {
             return $m[0];
         }
         $path   = static::$emojionePath.'assets/png/'.$m[1].'.png';
         $objImg = \Image::create($path);
+
         return \Image::get($path, '64', '64', '', $objImg->getCacheName(), true);
     }
 
-    private function createEmojiStrategy() {
-        $strPath     = 'assets/js/shoutbox_emoji_strategy.js';
-        $strSource   = static::$emojionePath.'emoji_strategy.json';
-
-        if (!file_exists($strPath) && is_readable($strSource)) {
-            $contentTmpl       = "var emojiStrategy = %s;";
-            $jsonEmojiStrategy = file_get_contents($strSource);
-
-            $file = new \File($strPath);
-            $file->write(sprintf($contentTmpl, $jsonEmojiStrategy));
-            $file->close();
-        }
-        return $strPath;
-    }
-
     private function notifiy($insertId) {
+
         $result = $this->Database->prepare('SELECT
             tl_shoutbox_entries.*,
             tl_shoutbox.email AS email,
@@ -231,8 +226,7 @@ class ModuleShoutbox extends \Module {
         }
 
         // Convert the comment to plain text
-        $strComment = strip_tags($data->entry);
-        $strComment = \String::decodeEntities($strComment);
+        $strComment = \String::decodeEntities(strip_tags($data->entry));
         $strComment = str_replace(array('[&]', '[lt]', '[gt]'), array('&', '<', '>'), $strComment);
 
         $objEmail           = new \Email();
@@ -279,5 +273,19 @@ class ModuleShoutbox extends \Module {
         return sprintf($format, $diff.' '.$period);
     }
 
-}
+    private function createEmojiStrategy() {
+        $strPath     = 'assets/js/shoutbox_emoji_strategy.js';
+        $strSource   = static::$emojionePath.'emoji_strategy.json';
 
+        if (!file_exists($strPath) && is_readable($strSource)) {
+            $contentTmpl       = "var emojiStrategy = %s;";
+            $jsonEmojiStrategy = file_get_contents($strSource);
+
+            $file = new \File($strPath);
+            $file->write(sprintf($contentTmpl, $jsonEmojiStrategy));
+            $file->close();
+        }
+        return $strPath;
+    }
+
+}

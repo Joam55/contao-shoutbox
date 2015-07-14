@@ -20,10 +20,13 @@
 
     },
     "require":{
-        "php":">=5.4",
-        "contao/core":">=3.2,<4",
+        "contao-community-alliance/composer-plugin": "~2",
         "emojione/emojione":"~1.4"
     },
+    "require-dev": {
+        "php":">=5.4",
+        "contao/core":">=3.2,<4"
+    },    
     "replace":{
         "contao-legacy/shoutbox": "*"
     },

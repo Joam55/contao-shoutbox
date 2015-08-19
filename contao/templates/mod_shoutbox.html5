@@ -2,12 +2,12 @@
 <div class="mod_shoutbox" id="<?=$this->shoutboxCssId?>">
     <div class="block_layer"></div>
 <?php if ($this->headline): ?>
-	<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+	<<?=$this->hl?>><?=$this->headline?></<?=$this->hl?>>
 <?php endif;?>
 
 <?php if (!$this->loggedIn): ?>
 
-    <form action="<?php echo $this->action; ?>" method="post"></form>
+    <form action="<?=$this->action?>" method="post"></form>
     <div class="menubar">
         <small class="info"><?=$GLOBALS['TL_LANG']['FMD']['shoutbox_tip_login']?></small>
         <button type="button" class="refresh simptip-position-left simptip-movable" data-tooltip="<?=$GLOBALS['TL_LANG']['FMD']['shoutbox_tip_refresh']?>" onclick="<?=$this->jsObj?>.refresh();"><i class="icon-arrows-cw"></i></button>
@@ -15,14 +15,14 @@
 <?php else: ?>
 
 
-<form action="<?php echo $this->action; ?>" method="post">
+<form action="<?=$this->action?>" method="post">
     <div class="menubar">
         <button type="button" class="refresh simptip-position-left simptip-movable" data-tooltip="<?=$GLOBALS['TL_LANG']['FMD']['shoutbox_tip_refresh']?>" onclick="<?=$this->jsObj?>.refresh();"><i class="icon-arrows-cw"></i></button>
         <button type="submit" class="send submit simptip-position-left simptip-movable" data-tooltip="<?=$GLOBALS['TL_LANG']['FMD']['shoutbox_tip_submit']?>"><i class="icon-paper-plane"></i></button>
     </div>
 
 	<input type="hidden" class="request_token" name="REQUEST_TOKEN" value="{{request_token}}">
-	<input type="hidden" name="FORM_SUBMIT" value="com_Shoutbox_<?php echo $this->shoutbox_id; ?>" />
+	<input type="hidden" name="FORM_SUBMIT" value="com_Shoutbox_<?=$this->shoutbox_id?>" />
     <input type="hidden" name="shoutbox_action" value="shout" />
 
     <div class="txtarea">
@@ -35,7 +35,7 @@
 
 <div class="entries">
     <ul class="list">
-        <?php if ($this->entries): echo $this->entries;  endif; ?>
+        <?=(($this->entries) ? $this->entries : '')?>
     </ul>
 </div>
 
@@ -48,4 +48,3 @@
 </script>
 </div>
 <!-- indexer::continue -->
-

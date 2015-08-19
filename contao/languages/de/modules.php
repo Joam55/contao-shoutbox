@@ -1,17 +1,4 @@
 <?php
 
-/**
- * Contao Open Source CMS
- * Copyright (C) 2005-2015 Leo Feyer
- *
- *
- * PHP version 5
- * @copyright  Martin Kozianka 2011-2015 <http://kozianka.de/>
- * @author     Martin Kozianka <http://kozianka.de/>
- * @package    Shoutbox 
- * @license    LGPL 
- * @filesource
- */
-
-$GLOBALS['TL_LANG']['MOD']['shoutbox']        = array('Shoutbox', 'Shoutbox');
-$GLOBALS['TL_LANG']['FMD']['shoutbox']        = array('Shoutbox', 'Shoutbox');
+$GLOBALS['TL_LANG']['MOD']['shoutbox']        = ['Shoutbox', 'Shoutbox'];
+$GLOBALS['TL_LANG']['FMD']['shoutbox']        = ['Shoutbox', 'Shoutbox'];

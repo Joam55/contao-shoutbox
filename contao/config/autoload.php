@@ -13,8 +13,7 @@
  * @filesource
  */
 
-TemplateLoader::addFiles(array
-(
+TemplateLoader::addFiles([
     'shoutbox_entry'   => 'system/modules/shoutbox/templates',
     'mod_shoutbox'     => 'system/modules/shoutbox/templates',
-));
+]);

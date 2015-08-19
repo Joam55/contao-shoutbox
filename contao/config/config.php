@@ -13,12 +13,8 @@
  * @filesource
  */
 
-$GLOBALS['FE_MOD']['miscellaneous']['shoutbox']        = 'ContaoShoutbox\ModuleShoutbox';
-
-$GLOBALS['BE_MOD']['content']['shoutbox']              = array(
-            'tables'     => array('tl_shoutbox', 'tl_shoutbox_entries'),
-            'icon'       => 'system/modules/shoutbox/assets/megaphone.png',
-);
-
-
-
+$GLOBALS['FE_MOD']['miscellaneous']['shoutbox'] = 'ContaoShoutbox\ModuleShoutbox';
+$GLOBALS['BE_MOD']['content']['shoutbox']       = [
+    'tables'     => ['tl_shoutbox', 'tl_shoutbox_entries'],
+    'icon'       => 'system/modules/shoutbox/assets/megaphone.png',
+];

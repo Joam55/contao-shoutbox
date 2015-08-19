@@ -21,7 +21,8 @@ namespace ContaoShoutbox;
  * @author     Martin Kozianka <http://kozianka.de/> 
  * @package    Controller
  */
-class ModuleShoutbox extends \Module {
+class ModuleShoutbox extends \Module
+{
     static $emojionePath       = 'composer/vendor/emojione/emojione/';
 
     private $lockInSeconds     = 10;
@@ -32,8 +33,8 @@ class ModuleShoutbox extends \Module {
     protected $entryTemplate   = 'shoutbox_entry';
 
 
-    private function getEntries() {
-
+    private function getEntries()
+    {
         $result = $this->Database->prepare("SELECT tl_shoutbox_entries.*, "
             ."tl_member.username AS username, CONCAT(tl_member.firstname, ' ', tl_member.lastname) AS fullname"
             ." FROM tl_shoutbox_entries, tl_member"
@@ -44,7 +45,8 @@ class ModuleShoutbox extends \Module {
 
         $i          = 0;
         $objPartial = new \FrontendTemplate($this->entryTemplate);
-        while($result->next()) {
+        while($result->next())
+        {
             $row              = $result->row();
             $format           = $GLOBALS['TL_CONFIG']['datimFormat'];
             $row['date']      = \Date::parse($format, $row['datim']);
@@ -60,7 +62,8 @@ class ModuleShoutbox extends \Module {
         return $strContent;
     }
 
-    protected function compile() {
+    protected function compile()
+    {
         global $objPage;
         $this->import('FrontendUser', 'User');
         $this->import('Comments');
@@ -68,21 +71,25 @@ class ModuleShoutbox extends \Module {
         $this->isAjax   = \Environment::get('isAjaxRequest');
         $this->loggedIn = FE_USER_LOGGED_IN;
 
-        if (\Input::get('shoutbox_action') === 'update' && $this->isAjax) {
+        if (\Input::get('shoutbox_action') === 'update' && $this->isAjax)
+        {
             $this->output($this->getEntries());
         }
 
         // Keine Posten wenn man nicht eingeloggt ist!
-        if (!$this->loggedIn && \Input::post('shoutbox_action') === 'shout' && $this->isAjax) {
+        if (!$this->loggedIn && \Input::post('shoutbox_action') === 'shout' && $this->isAjax)
+        {
             $jsonObj              = new \stdClass();
             $jsonObj->token       = REQUEST_TOKEN;
             $jsonObj->message     = $GLOBALS['TL_LANG']['FMD']['shoutbox_no_access'];
             $this->output(json_encode($jsonObj), true);
         }
 
-        if (\Input::post('shoutbox_action') === 'shout' && $this->loggedIn) {
+        if (\Input::post('shoutbox_action') === 'shout' && $this->loggedIn)
+        {
             $addedEntry = $this->addEntry();
-            if ($this->isAjax) {
+            if ($this->isAjax)
+            {
                 $jsonObj              = new \stdClass();
                 $jsonObj->token       = REQUEST_TOKEN;
                 $jsonObj->entriesHtml = $this->getEntries();
@@ -130,14 +137,17 @@ class ModuleShoutbox extends \Module {
 
 	}
 
-    private function addEntry() {
+    private function addEntry()
+    {
         $now    = time();
         $result = $this->Database->prepare('SELECT tstamp FROM tl_shoutbox_entries'
             .' WHERE member = ? ORDER BY tstamp DESC')->limit(1)->execute($this->User->id);
 
-        if ($result->numRows == 1) {
+        if ($result->numRows == 1)
+        {
             $diff = $result->tstamp + $this->lockInSeconds - $now;
-            if ($diff > 0) {
+            if ($diff > 0)
+            {
                 $this->message = sprintf($GLOBALS['TL_LANG']['FMD']['shoutbox_locked_message'], $diff);
                 return false;
             }
@@ -151,7 +161,8 @@ class ModuleShoutbox extends \Module {
         return true;
     }
 
-    private function parseEntry($entry) {
+    private function parseEntry($entry)
+    {
 
         // Convert links
         $entry  = preg_replace_callback('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', function ($arr) {
@@ -171,7 +182,8 @@ class ModuleShoutbox extends \Module {
         return $entry;
     }
 
-    private function generateLinkIcons($input) {
+    private function generateLinkIcons($input)
+    {
         $content = preg_replace_callback('/(((http(s)?\:\/\/)|(www\.))([^\s]+[^\.\s]+))/', function ($arr) {
             return sprintf('<a target="_blank" href="%s" title="%s"><img class="emojione" src="%s"></a>',
                 $arr[0], $arr[0], static::emoticonCallback(array('', '2197'))
@@ -180,7 +192,8 @@ class ModuleShoutbox extends \Module {
         return $content;
     }
 
-    private function replaceEmoji($input) {
+    private function replaceEmoji($input)
+    {
         $strReplace   = '___REPLACE___';
         $arrEmoticons = array(":-&#41;", ":&#41;", ";-&#41;", ";&#41;", ":-&#40;", ":&#40;");
         $arrEmojione  = array(":smiley:",":smiley:", ":wink:", ":wink:", ":disappointed:", ":disappointed:");
@@ -195,8 +208,10 @@ class ModuleShoutbox extends \Module {
         return $content;
     }
 
-    static function emoticonCallback($m) {
-        if((!is_array($m)) || (!isset($m[1])) || (empty($m[1]))) {
+    static function emoticonCallback($m)
+    {
+        if((!is_array($m)) || (!isset($m[1])) || (empty($m[1])))
+        {
             return $m[0];
         }
         $path   = static::$emojionePath.'assets/png/'.$m[1].'.png';
@@ -205,8 +220,8 @@ class ModuleShoutbox extends \Module {
         return \Image::get($path, '64', '64', '', $objImg->getCacheName(), true);
     }
 
-    private function notifiy($insertId) {
-
+    private function notifiy($insertId)
+    {
         $result = $this->Database->prepare('SELECT
             tl_shoutbox_entries.*,
             tl_shoutbox.email AS email,
@@ -216,12 +231,14 @@ class ModuleShoutbox extends \Module {
             WHERE tl_shoutbox_entries.id = ?
             AND tl_shoutbox_entries.member = tl_member.id
             AND tl_shoutbox_entries.pid = tl_shoutbox.id')->execute($insertId);
-        if($result->numRows != 1) {
+        if($result->numRows != 1)
+        {
             return false;
         }
         $data = (Object) $result->row();
 
-        if (!\Validator::isEmail($data->email)) {
+        if (!\Validator::isEmail($data->email))
+        {
             return false;
         }
 
@@ -247,20 +264,24 @@ class ModuleShoutbox extends \Module {
     }
 
 
-    private function output($content, $jsonHeader = false) {
+    private function output($content, $jsonHeader = false)
+    {
         header('HTTP/1.0 200 OK');
-        if ($jsonHeader) {
+        if ($jsonHeader)
+        {
             header('Content-type: application/json');
         }
         echo $content;
         exit;
     }
 
-    public function timesince($timestamp) {
+    public function timesince($timestamp)
+    {
         $diff       = time() - $timestamp;
         $lengths    = array("60","60","24","7","4.35","12","10");
 
-        for($j = 0; $diff >= $lengths[$j] && $j < sizeof($lengths); $j++) {
+        for($j = 0; $diff >= $lengths[$j] && $j < sizeof($lengths); $j++)
+        {
             $diff /= $lengths[$j];
         }
 
@@ -273,11 +294,13 @@ class ModuleShoutbox extends \Module {
         return sprintf($format, $diff.' '.$period);
     }
 
-    private function createEmojiStrategy() {
+    private function createEmojiStrategy()
+    {
         $strPath     = 'assets/js/shoutbox_emoji_strategy.js';
         $strSource   = static::$emojionePath.'emoji_strategy.json';
 
-        if (!file_exists($strPath) && is_readable($strSource)) {
+        if (!file_exists($strPath) && is_readable($strSource))
+        {
             $contentTmpl       = "var emojiStrategy = %s;";
             $jsonEmojiStrategy = file_get_contents($strSource);
 
